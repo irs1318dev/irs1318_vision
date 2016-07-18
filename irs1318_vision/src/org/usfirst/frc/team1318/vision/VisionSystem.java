@@ -2,6 +2,7 @@ package org.usfirst.frc.team1318.vision;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.usfirst.frc.team1318.vision.Analyzer.HSVCenterAnalyzer;
 import org.usfirst.frc.team1318.vision.Analyzer.ImageSaver;
 import org.usfirst.frc.team1318.vision.Reader.MJPEGCameraReader;
 
@@ -21,7 +22,18 @@ public class VisionSystem implements Runnable
     {
         try
         {
-            while (this.captureAndAnalyze());
+            long startTime = System.currentTimeMillis();
+            long analyzedFrames = 0;
+            while (this.captureAndAnalyze())
+            {
+                analyzedFrames++;
+                if (VisionConstants.debug && analyzedFrames % 5 == 0)
+                {
+                    long currTime = System.currentTimeMillis();
+
+                    System.out.println(String.format("Overall Average frame processing rate %f fps", 1000.0 * analyzedFrames / (currTime - startTime)));
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -51,7 +63,7 @@ public class VisionSystem implements Runnable
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
-        ImageSaver imageAnalyzer = new ImageSaver("C:/devfrc/vision/test1/");
+        HSVCenterAnalyzer imageAnalyzer = new HSVCenterAnalyzer();
 
         VisionSystem visionSystem = new VisionSystem(cameraReader, imageAnalyzer);
 

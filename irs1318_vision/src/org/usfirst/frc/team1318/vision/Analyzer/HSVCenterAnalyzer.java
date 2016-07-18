@@ -26,6 +26,8 @@ public class HSVCenterAnalyzer implements ImageAnalyzable
     @Override
     public void AnalyzeImage(Mat image)
     {
+        this.count++;
+
         // first, undistort the image.
         image = this.undistorter.undistortImage(image);
         if (VisionConstants.debug)
@@ -42,18 +44,27 @@ public class HSVCenterAnalyzer implements ImageAnalyzable
 
         // third, find the largest contour.
         MatOfPoint largestContour = ContourHelper.findLargestContour(image);
+        if (largestContour == null)
+        {
+            if (VisionConstants.debug)
+            {
+                System.out.println("could not find any contour");
+            }
+
+            return;
+        }
 
         // fourth, find the center of mass for the largest contour
         Point centerOfMass = ContourHelper.findCenterOfMass(largestContour);
-        if (centerOfMass != null)
+        if (centerOfMass == null)
         {
-            System.out.println(String.format("Center of mass: %f, %f", centerOfMass.x, centerOfMass.y));
-        }
-        else if (VisionConstants.debug)
-        {
-            System.out.println("couldn't find the center of mass!");
+            if (VisionConstants.debug)
+            {
+                System.out.println("couldn't find the center of mass!");
+            }
         }
 
-        this.count++;
+        // TODO: output data
+        System.out.println(String.format("Center of mass: %f, %f", centerOfMass.x, centerOfMass.y));
     }
 }

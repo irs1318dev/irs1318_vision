@@ -15,7 +15,7 @@ public class Test
         //Thread cameraThread = new Thread(cameraReader);
         //cameraThread.start();
 
-        LocalImageReader cameraReader = new LocalImageReader("C:/devfrc/git/irs1318_2014/visionSamples/imageMedium.jpg");
+        LocalImageReader cameraReader = new LocalImageReader("C:/devfrc/vision/samples/imageClose.jpg");
 
         HSVCenterAnalyzer imageAnalyzer = new HSVCenterAnalyzer();
 
