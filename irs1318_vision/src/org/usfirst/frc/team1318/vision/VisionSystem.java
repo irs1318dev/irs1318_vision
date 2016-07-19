@@ -2,9 +2,8 @@ package org.usfirst.frc.team1318.vision;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.usfirst.frc.team1318.vision.Analyzer.HSVCenterAnalyzer;
-import org.usfirst.frc.team1318.vision.Analyzer.ImageSaver;
-import org.usfirst.frc.team1318.vision.Reader.MJPEGCameraReader;
+import org.usfirst.frc.team1318.vision.Analyzer.*;
+import org.usfirst.frc.team1318.vision.Reader.*;
 
 public class VisionSystem implements Runnable
 {
@@ -27,11 +26,12 @@ public class VisionSystem implements Runnable
             while (this.captureAndAnalyze())
             {
                 analyzedFrames++;
-                if (VisionConstants.debug && analyzedFrames % 5 == 0)
+                if (VisionConstants.DEBUG && analyzedFrames % 5 == 0)
                 {
                     long currTime = System.currentTimeMillis();
 
-                    System.out.println(String.format("Overall Average frame processing rate %f fps", 1000.0 * analyzedFrames / (currTime - startTime)));
+                    double framesPerMillisecond = 1.0 * analyzedFrames / (currTime - startTime); 
+                    System.out.println(String.format("Overall Average frame processing rate %f fps", 1000.0 * framesPerMillisecond));
                 }
             }
         }
@@ -59,7 +59,7 @@ public class VisionSystem implements Runnable
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        MJPEGCameraReader cameraReader = new MJPEGCameraReader(VisionConstants.MjpegLocation);
+        MJPEGCameraReader cameraReader = new MJPEGCameraReader(VisionConstants.CAMERA_MJPEG_URL);
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 

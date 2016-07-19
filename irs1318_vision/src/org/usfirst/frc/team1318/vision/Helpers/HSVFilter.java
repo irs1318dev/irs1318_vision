@@ -23,7 +23,7 @@ public class HSVFilter
         sourceBGR.release();
 
         Mat sourceHSV = image.clone();
-        Core.inRange(image, this.lowerBound, this.upperBound, image);
+        Core.inRange(sourceHSV, this.lowerBound, this.upperBound, image);
         sourceHSV.release();
 
         return image;

@@ -19,7 +19,7 @@ public class ImageUndistorter
     {
         Size size;
         Mat intrinsicMatrix;
-        if (VisionConstants.resolution.equals("640x480"))
+        if (VisionConstants.CAMERA_RESOLUTION.equals("640x480"))
         {
             intrinsicMatrix = ImageUndistorter.build640x480Intrinsic();
             size = new Size(640, 480);

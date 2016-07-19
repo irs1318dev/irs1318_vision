@@ -1,9 +1,8 @@
 package org.usfirst.frc.team1318.vision;
 
 import org.opencv.core.*;
-import org.usfirst.frc.team1318.vision.Analyzer.HSVCenterAnalyzer;
-import org.usfirst.frc.team1318.vision.Analyzer.ImageSaver;
-import org.usfirst.frc.team1318.vision.Reader.LocalImageReader;
+import org.usfirst.frc.team1318.vision.Analyzer.*;
+import org.usfirst.frc.team1318.vision.Reader.*;
 
 public class Test
 {
@@ -11,7 +10,7 @@ public class Test
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        //MJPEGCameraReader cameraReader = new MJPEGCameraReader("http://root:1318@169.254.59.141/mjpg/video.mjpg?resolution=320x240&req_fps=30&.mjpg");
+        //MJPEGCameraReader cameraReader = new MJPEGCameraReader(VisionConstants.CAMERA_MJPEG_URL);
         //Thread cameraThread = new Thread(cameraReader);
         //cameraThread.start();
 
@@ -19,7 +18,7 @@ public class Test
 
         HSVCenterAnalyzer imageAnalyzer = new HSVCenterAnalyzer();
 
-        //ImageSaver imageAnalyzer = new ImageSaver("C:/devfrc/vision/test1/");
+        //ImageSaver imageAnalyzer = new ImageSaver(VisionConstants.DEBUG_OUTPUT_FOLDER);
 
         VisionSystem visionSystem = new VisionSystem(cameraReader, imageAnalyzer);
 
