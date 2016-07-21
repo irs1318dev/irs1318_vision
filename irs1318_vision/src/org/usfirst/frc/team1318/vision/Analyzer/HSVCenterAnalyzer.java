@@ -6,13 +6,13 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.usfirst.frc.team1318.vision.ImageAnalyzable;
+import org.usfirst.frc.team1318.vision.FrameAnalyzable;
 import org.usfirst.frc.team1318.vision.VisionConstants;
 import org.usfirst.frc.team1318.vision.Helpers.ContourHelper;
 import org.usfirst.frc.team1318.vision.Helpers.HSVFilter;
 import org.usfirst.frc.team1318.vision.Helpers.ImageUndistorter;
 
-public class HSVCenterAnalyzer implements ImageAnalyzable
+public class HSVCenterAnalyzer implements FrameAnalyzable
 {
     private final ImageUndistorter undistorter;
     private final HSVFilter hsvFilter;
@@ -26,7 +26,7 @@ public class HSVCenterAnalyzer implements ImageAnalyzable
     }
 
     @Override
-    public void AnalyzeImage(Mat image)
+    public void analyzeFrame(Mat image)
     {
         this.count++;
 

@@ -2,9 +2,9 @@ package org.usfirst.frc.team1318.vision.Reader;
 
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
-import org.usfirst.frc.team1318.vision.CameraReadable;
+import org.usfirst.frc.team1318.vision.FrameReadable;
 
-public class MJPEGCameraReader implements Runnable, CameraReadable
+public class MJPEGCameraReader implements Runnable, FrameReadable
 {
     private final String videoUrl;
 

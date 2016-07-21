@@ -2,9 +2,9 @@ package org.usfirst.frc.team1318.vision.Analyzer;
 
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.usfirst.frc.team1318.vision.ImageAnalyzable;
+import org.usfirst.frc.team1318.vision.FrameAnalyzable;
 
-public class ImageSaver implements ImageAnalyzable
+public class ImageSaver implements FrameAnalyzable
 {
     private final String directory;
     private int count;
@@ -16,7 +16,7 @@ public class ImageSaver implements ImageAnalyzable
     }
 
     @Override
-    public void AnalyzeImage(Mat image)
+    public void analyzeFrame(Mat image)
     {
         String fileName = String.format("%simage%s.jpg", this.directory, this.count);
         if (Imgcodecs.imwrite(fileName, image))

@@ -7,13 +7,13 @@ import org.usfirst.frc.team1318.vision.Reader.*;
 
 public class VisionSystem implements Runnable
 {
-    private CameraReadable cameraReader;
-    private ImageAnalyzable imageAnalyzer;
+    private FrameReadable frameReader;
+    private FrameAnalyzable frameAnalyzer;
 
-    public VisionSystem(CameraReadable cameraReader, ImageAnalyzable imageAnalyzer)
+    public VisionSystem(FrameReadable frameReader, FrameAnalyzable frameAnalyzer)
     {
-        this.cameraReader = cameraReader;
-        this.imageAnalyzer = imageAnalyzer;
+        this.frameReader = frameReader;
+        this.frameAnalyzer = frameAnalyzer;
     }
 
     @Override
@@ -44,13 +44,13 @@ public class VisionSystem implements Runnable
     public boolean captureAndAnalyze()
         throws InterruptedException
     {
-        Mat image = this.cameraReader.getCurrentFrame();
+        Mat image = this.frameReader.getCurrentFrame();
         if (image == null)
         {
             return false;
         }
 
-        this.imageAnalyzer.AnalyzeImage(image);
+        this.frameAnalyzer.analyzeFrame(image);
         image.release();
         return true;
     }
@@ -63,9 +63,9 @@ public class VisionSystem implements Runnable
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
-        HSVCenterAnalyzer imageAnalyzer = new HSVCenterAnalyzer();
+        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer();
 
-        VisionSystem visionSystem = new VisionSystem(cameraReader, imageAnalyzer);
+        VisionSystem visionSystem = new VisionSystem(cameraReader, frameAnalyzer);
 
         Thread visionThread = new Thread(visionSystem);
         visionThread.run();

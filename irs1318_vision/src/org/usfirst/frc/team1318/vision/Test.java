@@ -10,17 +10,17 @@ public class Test
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        //MJPEGCameraReader cameraReader = new MJPEGCameraReader(VisionConstants.CAMERA_MJPEG_URL);
-        //Thread cameraThread = new Thread(cameraReader);
+        //MJPEGCameraReader frameReader = new MJPEGCameraReader(VisionConstants.CAMERA_MJPEG_URL);
+        //Thread cameraThread = new Thread(frameReader);
         //cameraThread.start();
 
-        LocalImageReader cameraReader = new LocalImageReader("C:/devfrc/vision/samples/imageClose.jpg");
+        LocalImageReader frameReader = new LocalImageReader("C:/devfrc/vision/samples/imageClose.jpg");
 
-        HSVCenterAnalyzer imageAnalyzer = new HSVCenterAnalyzer();
+        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer();
 
-        //ImageSaver imageAnalyzer = new ImageSaver(VisionConstants.DEBUG_OUTPUT_FOLDER);
+        //ImageSaver frameAnalyzer = new ImageSaver(VisionConstants.DEBUG_OUTPUT_FOLDER);
 
-        VisionSystem visionSystem = new VisionSystem(cameraReader, imageAnalyzer);
+        VisionSystem visionSystem = new VisionSystem(frameReader, frameAnalyzer);
 
         Test.commandLineTester(visionSystem);
 
