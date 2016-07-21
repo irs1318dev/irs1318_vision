@@ -11,12 +11,17 @@ import org.opencv.imgproc.Moments;
 
 public class ContourHelper
 {
-    public static MatOfPoint findLargestContour(Mat image)
+    /**
+     * Find the largest contour in the frame
+     * @param frame in which to look for contours
+     * @return largest contour
+     */
+    public static MatOfPoint findLargestContour(Mat frame)
     {
         // find the contours using OpenCV API...
         Mat unused = new Mat();
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        Imgproc.findContours(image, contours, unused, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_TC89_KCOS);
+        Imgproc.findContours(frame, contours, unused, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_TC89_KCOS);
         unused.release();
 
         // find the largest contour...
@@ -44,7 +49,12 @@ public class ContourHelper
         return largestContour;
     }
 
-    // Find center of mass for a contour using Moments http://docs.opencv.org/3.1.0/d8/d23/classcv_1_1Moments.html
+    /**
+     * Find the center of mass for a contour using Moments.
+     * http://docs.opencv.org/3.1.0/d8/d23/classcv_1_1Moments.html
+     * @param contour to use
+     * @return point representing the center of the contour
+     */
     public static Point findCenterOfMass(MatOfPoint contour)
     {
         Moments moments = Imgproc.moments(contour);

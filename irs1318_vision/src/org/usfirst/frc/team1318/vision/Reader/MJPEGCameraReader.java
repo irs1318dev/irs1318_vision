@@ -13,6 +13,10 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
     private boolean frameReady;
     private boolean stop;
 
+    /**
+     * Initializes a new instance of the MJPEGCameraReader class.
+     * @param videoUrl to use to retrieve frame data
+     */
     public MJPEGCameraReader(String videoUrl)
     {
         this.videoUrl = videoUrl;
@@ -23,6 +27,9 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
         this.stop = false;
     }
 
+    /**
+     * Run the thread that captures frames and buffers the most recently retrieved frame so that an analyzer can use it.
+     */
     @Override
     public void run()
     {
@@ -44,11 +51,19 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
         vc.release();
     }
 
+    /**
+     * stop retrieving frames
+     */
     public void stop()
     {
         this.stop = true;
     }
 
+    /**
+     * Retrieve the most recent image frame from the MJPEG IP Camera
+     * @return frame of an image
+     * @throws InterruptedException
+     */
     @Override
     public Mat getCurrentFrame()
         throws InterruptedException
@@ -71,7 +86,11 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
         }
     }
 
-    private void setCurrentFrame(Mat image)
+    /**
+     * set the current frame as the current frame
+     * @param frame to set as current
+     */
+    private void setCurrentFrame(Mat frame)
     {
         synchronized (this.lock)
         {
@@ -83,7 +102,7 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
             }
 
             // hold current frame
-            this.currentFrame = image;
+            this.currentFrame = frame;
             this.frameReady = true;
 
             // notify another lock holder

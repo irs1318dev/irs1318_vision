@@ -4,6 +4,11 @@ import org.opencv.core.Mat;
 
 public interface FrameReadable
 {
+    /**
+     * Retrieve an image frame
+     * @return frame of an image
+     * @throws InterruptedException
+     */
     public Mat getCurrentFrame()
         throws InterruptedException;
 }

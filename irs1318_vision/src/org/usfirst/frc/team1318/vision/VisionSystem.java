@@ -10,12 +10,20 @@ public class VisionSystem implements Runnable
     private FrameReadable frameReader;
     private FrameAnalyzable frameAnalyzer;
 
+    /**
+     * Initializes a new instance of the VisionSystem class.
+     * @param frameReader that reads frames from some source
+     * @param frameAnalyzer that analyzes frames from some source
+     */
     public VisionSystem(FrameReadable frameReader, FrameAnalyzable frameAnalyzer)
     {
         this.frameReader = frameReader;
         this.frameAnalyzer = frameAnalyzer;
     }
 
+    /**
+     * Run the process of capturing and analyzing frames until we have reached the end of the stream.
+     */
     @Override
     public void run()
     {
@@ -41,6 +49,11 @@ public class VisionSystem implements Runnable
         }
     }
 
+    /**
+     * Capture a frame from the frame reader and analyze that frame using the frame analyzer
+     * @return
+     * @throws InterruptedException
+     */
     public boolean captureAndAnalyze()
         throws InterruptedException
     {
@@ -55,6 +68,10 @@ public class VisionSystem implements Runnable
         return true;
     }
 
+    /**
+     * Main entrypoint for Vision System.
+     * @param args from commandline input
+     */
     public static void main(String[] args)
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);

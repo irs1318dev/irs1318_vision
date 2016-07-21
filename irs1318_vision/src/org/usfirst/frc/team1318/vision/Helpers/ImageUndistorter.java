@@ -13,6 +13,7 @@ public class ImageUndistorter
     private Mat mapY;
 
     /**
+     * Initializes a new instance of the ImageUndistorter class.
      * For background, see http://docs.opencv.org/3.1.0/d4/d94/tutorial_camera_calibration.html
      */
     public ImageUndistorter()
@@ -52,18 +53,24 @@ public class ImageUndistorter
         newCameraMatrix.release();
     }
 
-    public Mat undistortImage(Mat image)
+    /**
+     * Undistort the frame so that straight lines appear straight in the image
+     * @param frame to undirsort
+     * @return an non-distorted version of the provided frame
+     */
+    public Mat undistortFrame(Mat frame)
     {
-        Mat source = image.clone();
+        Mat source = frame.clone();
 
-        Imgproc.remap(source, image, this.mapX, this.mapY, Imgproc.INTER_LINEAR, Imgproc.WARP_FILL_OUTLIERS, new Scalar(0));
+        Imgproc.remap(source, frame, this.mapX, this.mapY, Imgproc.INTER_LINEAR, Imgproc.WARP_FILL_OUTLIERS, new Scalar(0));
         source.release();
 
-        return image;
+        return frame;
     }
 
     /**
      * Build an intrinsic matrix for the Axis M1011 camera at 320x240 resolution.
+     * @return an intrinsic matrix
      */
     private static Mat build320x240Intrinsic()
     {
@@ -86,6 +93,7 @@ public class ImageUndistorter
 
     /**
      * Build an intrinsic matrix for the Axis M1011 camera at 640x480 resolution.
+     * @return an intrinsic matrix
      */
     private static Mat build640x480Intrinsic()
     {
@@ -108,6 +116,7 @@ public class ImageUndistorter
 
     /**
      * Build an distortion coefficient matrix for the Axis M1011 camera.
+     * @return an distortion matrix
      */
     private static Mat buildDistortion()
     {

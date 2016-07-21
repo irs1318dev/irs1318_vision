@@ -4,5 +4,9 @@ import org.opencv.core.Mat;
 
 public interface FrameAnalyzable
 {
-    public void analyzeFrame(Mat image);
+    /**
+     * Analyze a single image frame
+     * @param frame image to analyze
+     */
+    public void analyzeFrame(Mat frame);
 }

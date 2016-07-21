@@ -18,6 +18,9 @@ public class HSVCenterAnalyzer implements FrameAnalyzable
     private final HSVFilter hsvFilter;
     private int count;
 
+    /**
+     * Initializes a new instance of the HSVCenterAnalyzer class.
+     */
     public HSVCenterAnalyzer()
     {
         this.undistorter = new ImageUndistorter();
@@ -25,13 +28,17 @@ public class HSVCenterAnalyzer implements FrameAnalyzable
         this.count = 0;
     }
 
+    /**
+     * Analyze a single image frame
+     * @param frame image to analyze
+     */
     @Override
     public void analyzeFrame(Mat image)
     {
         this.count++;
 
         // first, undistort the image.
-        image = this.undistorter.undistortImage(image);
+        image = this.undistorter.undistortFrame(image);
         if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_OUTPUT  && this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
         {
             Imgcodecs.imwrite(String.format("%simage%d-1.undistorted.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count), image);
