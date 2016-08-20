@@ -39,7 +39,10 @@ public class VisionSystem implements Runnable
                     long currTime = System.currentTimeMillis();
 
                     double framesPerMillisecond = 1.0 * analyzedFrames / (currTime - startTime); 
-                    System.out.println(String.format("Overall Average frame processing rate %f fps", 1000.0 * framesPerMillisecond));
+                    if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT)
+                    {
+                        System.out.println(String.format("Overall Average frame processing rate %f fps", 1000.0 * framesPerMillisecond));
+                    }
                 }
             }
         }

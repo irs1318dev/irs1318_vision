@@ -8,7 +8,7 @@ public class VisionConstants
     public static final boolean DEBUG_PRINT_OUTPUT = true;
     public static final boolean DEBUG_FRAME_OUTPUT = true;
     public static final int DEBUG_FRAME_OUTPUT_GAP = 20; // the number of frames to wait between saving debug image output
-    public static final String DEBUG_OUTPUT_FOLDER = "C:/devfrc/vision/test2/";
+    public static final String DEBUG_OUTPUT_FOLDER = "/home/pi/Documents/vision/test";
 
     public static final int CAMERA_FPS = 30;
     public static final String CAMERA_IP_ADDRESS = "169.254.7.31"; // "169.254.59.141";
