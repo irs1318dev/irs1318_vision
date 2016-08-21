@@ -6,6 +6,7 @@ public class VisionConstants
 {
     public static final boolean DEBUG = true;
     public static final boolean DEBUG_PRINT_OUTPUT = true;
+    public static final int DEBUG_FPS_AVERAGE = 5;
     public static final boolean DEBUG_FRAME_OUTPUT = true;
     public static final int DEBUG_FRAME_OUTPUT_GAP = 20; // the number of frames to wait between saving debug image output
     public static final String DEBUG_OUTPUT_FOLDER = "/home/pi/Documents/vision/test/";

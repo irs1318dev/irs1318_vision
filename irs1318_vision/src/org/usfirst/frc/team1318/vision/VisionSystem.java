@@ -27,22 +27,23 @@ public class VisionSystem implements Runnable
     @Override
     public void run()
     {
+        long startTime = System.currentTimeMillis();
+        long analyzedFrames = 0;
+
         try
         {
-            long startTime = System.currentTimeMillis();
-            long analyzedFrames = 0;
+            long lastMeasured = System.currentTimeMillis();
             while (this.captureAndAnalyze())
             {
                 analyzedFrames++;
-                if (VisionConstants.DEBUG && analyzedFrames % 5 == 0)
+                if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT && analyzedFrames % VisionConstants.DEBUG_FPS_AVERAGE == 0)
                 {
-                    long currTime = System.currentTimeMillis();
+                    long elapsedTime = System.currentTimeMillis() - lastMeasured;
 
-                    double framesPerMillisecond = 1.0 * analyzedFrames / (currTime - startTime); 
-                    if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT)
-                    {
-                        System.out.println(String.format("Overall Average frame processing rate %f fps", 1000.0 * framesPerMillisecond));
-                    }
+                    double framesPerMillisecond = ((double)VisionConstants.DEBUG_FPS_AVERAGE) / elapsedTime;
+                    System.out.println(String.format("Recent Average frame processing rate %f fps", 1000.0 * framesPerMillisecond));
+
+                    lastMeasured = System.currentTimeMillis();
                 }
             }
         }
