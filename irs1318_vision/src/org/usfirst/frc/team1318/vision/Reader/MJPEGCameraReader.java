@@ -7,6 +7,7 @@ import org.usfirst.frc.team1318.vision.FrameReadable;
 public class MJPEGCameraReader implements Runnable, FrameReadable
 {
     private final String videoUrl;
+    private final int usbId;
 
     private Object lock;
     private Mat currentFrame;
@@ -20,6 +21,22 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
     public MJPEGCameraReader(String videoUrl)
     {
         this.videoUrl = videoUrl;
+        this.usbId = -1;
+
+        this.lock = new Object();
+        this.currentFrame = null;
+        this.frameReady = false;
+        this.stop = false;
+    }
+
+    /**
+     * Initializes a new instance of the MJPEGCameraReader class.
+     * @param usbId to use to identify a local USB camera
+     */
+    public MJPEGCameraReader(int usbId)
+    {
+        this.usbId = usbId;
+        this.videoUrl = null;
 
         this.lock = new Object();
         this.currentFrame = null;
@@ -34,7 +51,16 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
     public void run()
     {
         VideoCapture vc = new VideoCapture();
-        boolean opened = vc.open(this.videoUrl);
+        boolean opened = false;
+        if (this.videoUrl != null)
+        {
+            opened = vc.open(this.videoUrl);
+        }
+        else
+        {
+            opened = vc.open(this.usbId);
+        }
+
         if (opened)
         {
             Mat image;

@@ -27,7 +27,6 @@ public class VisionSystem implements Runnable
     @Override
     public void run()
     {
-        long startTime = System.currentTimeMillis();
         long analyzedFrames = 0;
 
         try
@@ -80,7 +79,7 @@ public class VisionSystem implements Runnable
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        MJPEGCameraReader cameraReader = new MJPEGCameraReader(VisionConstants.CAMERA_MJPEG_URL);
+        MJPEGCameraReader cameraReader = new MJPEGCameraReader(VisionConstants.CAMERA_INDEX);
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
