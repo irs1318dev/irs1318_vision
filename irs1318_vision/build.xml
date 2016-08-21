@@ -65,7 +65,7 @@
         <jar destfile="${bin}/irs1318_vision.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.usfirst.frc.team1318.vision.VisionSystem"/>
-                <attribute name="Class-Path" value=". ../${opencv-3.1}"/>
+                <attribute name="Class-Path" value=". ${opencv-3.1}"/>
             </manifest>
             <fileset dir="${bld}"/>
         </jar>
