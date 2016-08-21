@@ -1,0 +1,9 @@
+Before you can use the Ant build, you must first set an environment variable named OPENCV_JAR which is the absolute path to the opencv_310.jar file.
+
+For me, this is:
+Windows:	/C:/devfrc/opencv-3.1/opencv/build/java/opencv_310.jar
+RPI:		/usr/local/share/OpenCV/java/opencv-310.jar
+
+I can then build the files using ant.  Once I have built the jar on the local machine, I can run it by running the following:
+Windows:	java -jar -Djava.library.path=C:\devfrc\opencv-3.1\opencv\build\java\x64\ bin\irs1318_vision.jar
+RPI:		java -jar bin\irs1318_vision.jar
