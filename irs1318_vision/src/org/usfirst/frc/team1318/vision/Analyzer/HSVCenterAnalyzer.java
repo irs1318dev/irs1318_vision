@@ -79,7 +79,7 @@ public class HSVCenterAnalyzer implements FrameAnalyzable
             return;
         }
 
-        if (VisionConstants.DEBUG && this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
+        if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_OUTPUT && this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
         {
             Imgproc.circle(undistortedImage, centerOfMass, 2, new Scalar(0, 0, 255), -1);
             Imgcodecs.imwrite(String.format("%simage%d-3.redrawn.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count), undistortedImage);
