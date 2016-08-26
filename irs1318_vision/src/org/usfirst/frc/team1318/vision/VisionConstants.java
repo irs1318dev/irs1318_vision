@@ -24,9 +24,6 @@ public class VisionConstants
             VisionConstants.CAMERA_RESOLUTION,
             VisionConstants.CAMERA_FPS);
 
-    // Settings for Lifecam USB camera
-    public static final int CAMERA_INDEX = 0;
-
     public static final Scalar HSV_FILTER_LOW = new Scalar(70, 150, 150); 
     public static final Scalar HSV_FILTER_HIGH = new Scalar(90, 255, 255);
 }
