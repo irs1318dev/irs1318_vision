@@ -5,7 +5,7 @@ Windows:	/C:/devfrc/opencv-3.1/opencv/build/java/opencv_310.jar
 RPI:		/usr/local/share/OpenCV/java/opencv-310.jar
 
 On Windows you can set the environment variable using Control Panel->System->Advanced->Environment Variables.
-On Linux, run "export OPENCV=..." for temporary variables, or add that same text to any .sh file under /etc/profiles.d/.  Requires system reboot.
+On Linux, run "export OPENCV_JAR=..." for temporary variables, or add that same text to any .sh file under /etc/profiles.d/.  Requires system reboot.
 
 I can then build the files using ant.  To do so:
 Windows+Eclipse:	Right-click build.xml, Run as->Ant build..., select build and Create Jar, run.
