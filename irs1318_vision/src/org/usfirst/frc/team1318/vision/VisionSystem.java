@@ -1,9 +1,16 @@
 package org.usfirst.frc.team1318.vision;
 
+import java.io.IOException;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.usfirst.frc.team1318.vision.Analyzer.*;
 import org.usfirst.frc.team1318.vision.Reader.*;
+import org.usfirst.frc.team1318.vision.Writer.MCP4725DACWriter;
+
+import com.pi4j.io.i2c.I2CBus;
+import com.pi4j.io.i2c.I2CFactory;
+import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
 public class VisionSystem implements Runnable
 {
@@ -78,6 +85,29 @@ public class VisionSystem implements Runnable
     public static void main(String[] args)
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
+        try
+        {
+            I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
+
+            MCP4725DACWriter w1 = new MCP4725DACWriter(false);
+            MCP4725DACWriter w2 = new MCP4725DACWriter(true);
+            w1.open(bus);
+            w2.open(bus);
+
+            w1.fastWrite(0);
+            w2.fastWrite(4095);
+        }
+        catch (UnsupportedBusNumberException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return;
+        }
 
         MJPEGCameraReader cameraReader;
         if (args != null && args.length != 0 && args[0] != null && !args[0].equals(""))
