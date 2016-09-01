@@ -1,8 +1,10 @@
-Before you can use the Ant build, you must first set an environment variable named OPENCV_JAR which is the absolute path to the opencv_310.jar file.
+Before you can use the Ant build, you must first set a pair of environment variables based on your OpenCV and Pi4J jar file locations:
+1. Named OPENCV_JAR which is the absolute path to the opencv_310.jar file.
+2. Named PI4J_JAR which is the absolute path to the pi4j-core.jar file.
 
 For me, this is:
-Windows:	/C:/devfrc/opencv-3.1/opencv/build/java/opencv_310.jar
-RPI:		/usr/local/share/OpenCV/java/opencv-310.jar
+Windows:	/C:/devfrc/opencv-3.1/opencv/build/java/opencv-310.jar  and  /C:/devfrc/pi4j-1.1/pi4j-core.jar
+RPI:		/usr/local/share/OpenCV/java/opencv-310.jar  and  /opt/pi4j/lib/pi4j-core.jar
 
 On Windows you can set the environment variable using Control Panel->System->Advanced->Environment Variables.
 On Linux, run "export OPENCV_JAR=..." for temporary variables, or add that same text to any .sh file under /etc/profiles.d/.  Requires system reboot.

@@ -6,6 +6,7 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="irs1318_vision">
     <property environment="env"/>
     <property name="opencv-3.1" value="${env.OPENCV_JAR}"/>
+    <property name="pi4j-1.1" value="${env.PI4J_JAR}"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
@@ -14,6 +15,7 @@
     <path id="irs1318_vision.classpath">
         <pathelement location="${bld}"/>
         <pathelement location="${opencv-3.1}"/>
+        <pathelement location="${pi4j-1.1}"/>
     </path>
     <target name="init">
         <mkdir dir="${bld}"/>
@@ -65,7 +67,7 @@
         <jar destfile="${bin}/irs1318_vision.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.usfirst.frc.team1318.vision.VisionSystem"/>
-                <attribute name="Class-Path" value=". ${opencv-3.1}"/>
+                <attribute name="Class-Path" value=". ${opencv-3.1} ${pi4j-1.1}"/>
             </manifest>
             <fileset dir="${bld}"/>
         </jar>
