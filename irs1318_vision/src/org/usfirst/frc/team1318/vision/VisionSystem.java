@@ -95,8 +95,8 @@ public class VisionSystem implements Runnable
             w1.open(bus);
             w2.open(bus);
 
-            w1.fastWrite(0);
-            w2.fastWrite(4095);
+            w1.fastWrite(4095);
+            w2.fastWrite(0);
         }
         catch (UnsupportedBusNumberException e)
         {
