@@ -74,13 +74,7 @@ public class MCP4725DACOutput
      */
     private byte[] bytePairFromInt(int value)
     {
-        // adjust the value to be in the actual range...
-        int range = 1 + this.maxValue - this.minValue;
-        if (range != DEFAULT_RANGE)
-        {
-            value = (int)((DEFAULT_RANGE / (double)range) * value);
-        }
-
+        // ensure that the value is in the desired range...
         if (value < this.minValue)
         {
             value = this.minValue;
@@ -88,6 +82,13 @@ public class MCP4725DACOutput
         else if (value > this.maxValue)
         {
             value = this.maxValue;
+        }
+
+        // adjust the value to better fit into the actual 12-bit range...
+        int range = 1 + this.maxValue - this.minValue;
+        if (range != DEFAULT_RANGE)
+        {
+            value = (int)((DEFAULT_RANGE / (double)range) * value);
         }
 
         byte highByte = (byte)((0xFF00 & value) >> 8);
