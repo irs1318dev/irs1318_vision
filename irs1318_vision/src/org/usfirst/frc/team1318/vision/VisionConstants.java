@@ -36,6 +36,6 @@ public class VisionConstants
     public static final Scalar HSV_FILTER_HIGH = new Scalar(90, 255, 255);
 
     // Settings for outputs wiring
-    public static final Pin DIGITAL_OUTPUT_PIN = RaspiPin.GPIO_00;
+    public static final Pin DIGITAL_OUTPUT_PIN = RaspiPin.GPIO_00; // Pin 11, labeled 17 on the cobbler (next one past ground, on same side as SDA/SCL)
     public static final int I2C_OUTPUT_BUS = I2CBus.BUS_1;
 }
