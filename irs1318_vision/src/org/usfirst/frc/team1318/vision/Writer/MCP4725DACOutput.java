@@ -10,7 +10,7 @@ public class MCP4725DACOutput
     
     private static final int DEFAULT_MIN_VALUE = 0;
     private static final int DEFAULT_MAX_VALUE = 4095;
-    private static final int DEFAULT_RANGE = 4096;
+    private static final int DEFAULT_RANGE = DEFAULT_MAX_VALUE - DEFAULT_MIN_VALUE;
 
     private final int deviceAddress;
 
@@ -85,7 +85,7 @@ public class MCP4725DACOutput
         }
 
         // adjust the value to better fit into the actual 12-bit range...
-        int range = 1 + this.maxValue - this.minValue;
+        int range = this.maxValue - this.minValue;
         if (range != DEFAULT_RANGE)
         {
             value = (int)((DEFAULT_RANGE / (double)range) * value);
