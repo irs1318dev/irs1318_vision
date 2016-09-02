@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.pi4j.io.i2c.*;
 
-public class MCP4725DACWriter
+public class MCP4725DACOutput
 {
     private static final int DEFAULT_DEVICE_ADDRESS = 0x62;
     
@@ -23,12 +23,12 @@ public class MCP4725DACWriter
      * Create an instance of the 
      * @param a0 whether the a0 port is set to power (true) or ground (false)
      */
-    public MCP4725DACWriter(boolean a0)
+    public MCP4725DACOutput(boolean a0)
     {
         this(a0, DEFAULT_MIN_VALUE, DEFAULT_MAX_VALUE);
     }
 
-    public MCP4725DACWriter(boolean a0, int minValue, int maxValue)
+    public MCP4725DACOutput(boolean a0, int minValue, int maxValue)
     {
         if (maxValue < minValue)
         {
@@ -42,18 +42,9 @@ public class MCP4725DACWriter
         this.i2cDevice = null;
     }
 
-    public boolean open(I2CBus i2cBus)
+    public void open(I2CBus i2cBus) throws IOException
     {
-        try
-        {
-            this.i2cDevice = i2cBus.getDevice(this.deviceAddress);
-            return true;
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        this.i2cDevice = i2cBus.getDevice(this.deviceAddress);
     }
 
     public boolean fastWrite(int value)

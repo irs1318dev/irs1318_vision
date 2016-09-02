@@ -6,7 +6,8 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.usfirst.frc.team1318.vision.Analyzer.*;
 import org.usfirst.frc.team1318.vision.Reader.*;
-import org.usfirst.frc.team1318.vision.Writer.MCP4725DACWriter;
+import org.usfirst.frc.team1318.vision.Writer.AnalogPointWriter;
+import org.usfirst.frc.team1318.vision.Writer.MCP4725DACOutput;
 
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CFactory;
@@ -42,11 +43,11 @@ public class VisionSystem implements Runnable
             while (this.captureAndAnalyze())
             {
                 analyzedFrames++;
-                if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT && analyzedFrames % VisionConstants.DEBUG_FPS_AVERAGE == 0)
+                if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT && analyzedFrames % VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL == 0)
                 {
                     long elapsedTime = System.currentTimeMillis() - lastMeasured;
 
-                    double framesPerMillisecond = ((double)VisionConstants.DEBUG_FPS_AVERAGE) / elapsedTime;
+                    double framesPerMillisecond = ((double)VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL) / elapsedTime;
                     System.out.println(String.format("Recent Average frame processing rate %f fps", 1000.0 * framesPerMillisecond));
 
                     lastMeasured = System.currentTimeMillis();
@@ -86,29 +87,6 @@ public class VisionSystem implements Runnable
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        try
-        {
-            I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
-
-            MCP4725DACWriter w1 = new MCP4725DACWriter(false);
-            MCP4725DACWriter w2 = new MCP4725DACWriter(true);
-            w1.open(bus);
-            w2.open(bus);
-
-            w1.fastWrite(4095);
-            w2.fastWrite(0);
-        }
-        catch (UnsupportedBusNumberException e)
-        {
-            e.printStackTrace();
-            return;
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            return;
-        }
-
         MJPEGCameraReader cameraReader;
         if (args != null && args.length != 0 && args[0] != null && !args[0].equals(""))
         {
@@ -139,10 +117,17 @@ public class VisionSystem implements Runnable
             cameraReader = new MJPEGCameraReader(VisionConstants.CAMERA_MJPEG_URL);
         }
 
+        AnalogPointWriter pointWriter =
+            new AnalogPointWriter(
+                VisionConstants.I2C_OUTPUT_BUS,
+                VisionConstants.DIGITAL_OUTPUT_PIN,
+                VisionConstants.CAMERA_RESOLUTION_X,
+                VisionConstants.CAMERA_RESOLUTION_Y);
+
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
-        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer();
+        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer(pointWriter);
 
         VisionSystem visionSystem = new VisionSystem(cameraReader, frameAnalyzer);
 

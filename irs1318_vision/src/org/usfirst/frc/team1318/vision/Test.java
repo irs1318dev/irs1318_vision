@@ -3,6 +3,7 @@ package org.usfirst.frc.team1318.vision;
 import org.opencv.core.*;
 import org.usfirst.frc.team1318.vision.Analyzer.*;
 import org.usfirst.frc.team1318.vision.Reader.*;
+import org.usfirst.frc.team1318.vision.Writer.DebugPointWriter;
 
 public class Test
 {
@@ -16,7 +17,7 @@ public class Test
 
         LocalImageReader frameReader = new LocalImageReader("C:/devfrc/vision/samples/imageClose.jpg");
 
-        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer();
+        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer(new DebugPointWriter());
 
         //ImageSaver frameAnalyzer = new ImageSaver(VisionConstants.DEBUG_OUTPUT_FOLDER);
 
