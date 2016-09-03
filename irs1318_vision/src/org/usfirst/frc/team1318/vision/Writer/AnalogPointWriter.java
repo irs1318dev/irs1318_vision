@@ -83,8 +83,8 @@ public class AnalogPointWriter implements PointWritable
         else
         {
             this.digitalOutput.setState(false);
-            this.xOutput.fastWrite((int)point.x);
-            this.yOutput.fastWrite((int)point.y);
+            this.xOutput.fastWrite((int)0);
+            this.yOutput.fastWrite((int)0);
         }
     }
 }
