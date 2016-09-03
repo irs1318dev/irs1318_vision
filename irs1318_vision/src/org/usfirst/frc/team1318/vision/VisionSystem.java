@@ -124,6 +124,8 @@ public class VisionSystem implements Runnable
                 VisionConstants.CAMERA_RESOLUTION_X,
                 VisionConstants.CAMERA_RESOLUTION_Y);
 
+        pointWriter.open();
+
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
