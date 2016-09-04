@@ -14,6 +14,9 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
     private boolean frameReady;
     private boolean stop;
 
+    private boolean opened;
+    private VideoCapture vc;
+
     /**
      * Initializes a new instance of the MJPEGCameraReader class.
      * @param videoUrl to use to retrieve frame data
@@ -27,6 +30,9 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
         this.currentFrame = null;
         this.frameReady = false;
         this.stop = false;
+
+        this.opened = false;
+        this.vc = null;
     }
 
     /**
@@ -42,6 +48,28 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
         this.currentFrame = null;
         this.frameReady = false;
         this.stop = false;
+
+        this.opened = false;
+        this.vc = null;
+    }
+
+    /**
+     * Opens the camera reader
+     * @return true if we were able to open the camera reader
+     */
+    public boolean open()
+    {
+        this.vc = new VideoCapture();
+        if (this.videoUrl != null)
+        {
+            this.opened = this.vc.open(this.videoUrl);
+        }
+        else
+        {
+            this.opened = this.vc.open(this.usbId);
+        }
+
+        return this.opened;
     }
 
     /**
@@ -50,31 +78,20 @@ public class MJPEGCameraReader implements Runnable, FrameReadable
     @Override
     public void run()
     {
-        VideoCapture vc = new VideoCapture();
-        boolean opened = false;
-        if (this.videoUrl != null)
-        {
-            opened = vc.open(this.videoUrl);
-        }
-        else
-        {
-            opened = vc.open(this.usbId);
-        }
-
-        if (opened)
+        if (this.opened)
         {
             Mat image;
             while (!this.stop)
             {
                 image = new Mat();
-                if (vc.read(image))
+                if (this.vc.read(image))
                 {
                     this.setCurrentFrame(image);
                 }
             }
         }
 
-        vc.release();
+        this.vc.release();
     }
 
     /**

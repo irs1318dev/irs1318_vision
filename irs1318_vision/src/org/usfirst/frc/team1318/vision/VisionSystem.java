@@ -1,17 +1,10 @@
 package org.usfirst.frc.team1318.vision;
 
-import java.io.IOException;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.usfirst.frc.team1318.vision.Analyzer.*;
 import org.usfirst.frc.team1318.vision.Reader.*;
 import org.usfirst.frc.team1318.vision.Writer.AnalogPointWriter;
-import org.usfirst.frc.team1318.vision.Writer.MCP4725DACOutput;
-
-import com.pi4j.io.i2c.I2CBus;
-import com.pi4j.io.i2c.I2CFactory;
-import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
 public class VisionSystem implements Runnable
 {
@@ -87,6 +80,7 @@ public class VisionSystem implements Runnable
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
+        String cameraString;
         MJPEGCameraReader cameraReader;
         if (args != null && args.length != 0 && args[0] != null && !args[0].equals(""))
         {
@@ -111,10 +105,19 @@ public class VisionSystem implements Runnable
             {
                 cameraReader = new MJPEGCameraReader(argument);
             }
+
+            cameraString = argument; 
         }
         else
         {
             cameraReader = new MJPEGCameraReader(VisionConstants.CAMERA_MJPEG_URL);
+            cameraString = VisionConstants.CAMERA_MJPEG_URL;
+        }
+
+        if (!cameraReader.open())
+        {
+            System.err.println(String.format("unable to open camera writer '%s'!", cameraString));
+            System.exit(1);
         }
 
         AnalogPointWriter pointWriter =
@@ -124,7 +127,11 @@ public class VisionSystem implements Runnable
                 VisionConstants.CAMERA_RESOLUTION_X,
                 VisionConstants.CAMERA_RESOLUTION_Y);
 
-        pointWriter.open();
+        if (!pointWriter.open())
+        {
+            System.err.println("unable to open point writer!");
+            System.exit(1);
+        }
 
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
