@@ -1,0 +1,13 @@
+[Unit]
+Description=Issaquah Robotics Society FRC team 1318 Vision System
+After=network.target syslog.target
+
+[Service]
+User=root
+Environment= OPENCV_JAR=/usr/local/share/OpenCV/java/opencv-310.jar PI4J_JAR=/opt/pi4j/lib/pi4j-core.jar
+ExecStart=/usr/bin/java -jar /home/pi/irs1318_vision/irs1318_vision/bin/irs1318_vision.jar
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

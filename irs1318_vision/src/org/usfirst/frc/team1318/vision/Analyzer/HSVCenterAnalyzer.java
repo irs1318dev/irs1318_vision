@@ -44,7 +44,7 @@ public class HSVCenterAnalyzer implements FrameAnalyzable
 
         // first, undistort the image.
         image = this.undistorter.undistortFrame(image);
-        if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_OUTPUT  && this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
+        if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_OUTPUT && this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
         {
             Imgcodecs.imwrite(String.format("%simage%d-1.undistorted.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count), image);
         }
@@ -63,7 +63,7 @@ public class HSVCenterAnalyzer implements FrameAnalyzable
         MatOfPoint largestContour = ContourHelper.findLargestContour(image);
         if (largestContour == null)
         {
-            if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT)
+            if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT && VisionConstants.DEBUG_PRINT_ANALYZER_DATA)
             {
                 System.out.println("could not find any contour");
             }
@@ -79,7 +79,7 @@ public class HSVCenterAnalyzer implements FrameAnalyzable
 
         if (VisionConstants.DEBUG)
         {
-            if (VisionConstants.DEBUG_PRINT_OUTPUT)
+            if (VisionConstants.DEBUG_PRINT_OUTPUT && VisionConstants.DEBUG_PRINT_ANALYZER_DATA)
             {
                 if (centerOfMass == null)
                 {
