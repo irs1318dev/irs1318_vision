@@ -1,0 +1,47 @@
+plugins
+{
+    id "java"
+    id "application"
+}
+
+repositories
+{
+    mavenCentral()
+    mavenLocal()
+    gradlePluginPortal()
+}
+
+String opencvJar = System.getenv('OPENCV_JAR')
+dependencies
+{
+    compile "javax.inject:javax.inject:1"
+    compile "com.google.guava:guava:21.0"
+    compile "com.google.inject:guice:4.1.0:no_aop"
+    compile "com.pi4j:pi4j-core:1.2"
+
+    compile files(opencvJar)
+
+    testCompile "org.mockito:mockito-all:1.10.19"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.1.0"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.1.0"
+}
+
+test {
+    useJUnitPlatform()
+    workingDir = "."
+}
+
+mainClassName = 'VisionSystem'
+
+// Setting up my Jar File.
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'irs1318_vision',
+                   'Implementation-Version': version
+    }
+}
+
+wrapper {
+    gradleVersion = '5.0'
+}
