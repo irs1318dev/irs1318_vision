@@ -39,7 +39,8 @@ version = '1.0'
 jar {
     manifest {
         attributes 'Implementation-Title': 'irs1318_vision',
-                   'Implementation-Version': version
+                   'Implementation-Version': version,
+                    'Main-Class': mainClassName
     }
 }
 
