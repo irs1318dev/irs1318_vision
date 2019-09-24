@@ -3,7 +3,7 @@ package frc.vision.writer;
 import java.io.IOException;
 
 import org.opencv.core.Point;
-import frc.vision.IPointWriter;
+import frc.vision.IWriter;
 
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
@@ -14,7 +14,7 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
-public class AnalogPointWriter implements IPointWriter
+public class AnalogPointWriter implements IWriter<Point>
 {
     private final MCP4725DACOutput xOutput;
     private final MCP4725DACOutput yOutput;
@@ -72,7 +72,7 @@ public class AnalogPointWriter implements IPointWriter
      * Write a point
      * @param point to write
      */
-    public void writePoint(Point point)
+    public void write(Point point)
     {
         if (point != null)
         {

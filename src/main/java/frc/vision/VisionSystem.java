@@ -5,6 +5,7 @@ import org.opencv.core.Mat;
 import frc.vision.analyzer.*;
 import frc.vision.reader.*;
 import frc.vision.writer.AnalogPointWriter;
+import frc.vision.writer.DebugPointWriter;
 
 public class VisionSystem implements Runnable
 {
@@ -81,7 +82,7 @@ public class VisionSystem implements Runnable
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         String cameraString;
-        MJPEGCameraReader cameraReader;
+        CameraReader cameraReader;
         if (args != null && args.length != 0 && args[0] != null && !args[0].equals(""))
         {
             String argument = args[0];
@@ -99,18 +100,18 @@ public class VisionSystem implements Runnable
 
             if (isNumeric)
             {
-                cameraReader = new MJPEGCameraReader(result);
+                cameraReader = new CameraReader(result);
             }
             else
             {
-                cameraReader = new MJPEGCameraReader(argument);
+                cameraReader = new CameraReader(argument);
             }
 
             cameraString = argument; 
         }
         else
         {
-            cameraReader = new MJPEGCameraReader(VisionConstants.CAMERA_MJPEG_URL);
+            cameraReader = new CameraReader(VisionConstants.CAMERA_MJPEG_URL);
             cameraString = VisionConstants.CAMERA_MJPEG_URL;
         }
 
@@ -120,12 +121,7 @@ public class VisionSystem implements Runnable
             System.exit(1);
         }
 
-        AnalogPointWriter pointWriter =
-            new AnalogPointWriter(
-                VisionConstants.I2C_OUTPUT_BUS,
-                VisionConstants.DIGITAL_OUTPUT_PIN,
-                VisionConstants.CAMERA_RESOLUTION_X,
-                VisionConstants.CAMERA_RESOLUTION_Y);
+        DebugPointWriter pointWriter = new DebugPointWriter();
 
         if (!pointWriter.open())
         {
@@ -136,7 +132,7 @@ public class VisionSystem implements Runnable
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
-        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer(pointWriter);
+        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer(pointWriter, false);
 
         VisionSystem visionSystem = new VisionSystem(cameraReader, frameAnalyzer);
 

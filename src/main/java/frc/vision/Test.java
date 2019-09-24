@@ -17,7 +17,7 @@ public class Test
 
         LocalImageReader frameReader = new LocalImageReader("C:/devfrc/vision/samples/imageClose.jpg");
 
-        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer(new DebugPointWriter());
+        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer(new DebugPointWriter(), false);
 
         //ImageSaver frameAnalyzer = new ImageSaver(VisionConstants.DEBUG_OUTPUT_FOLDER);
 

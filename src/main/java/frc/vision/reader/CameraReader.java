@@ -4,7 +4,7 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import frc.vision.IFrameReader;
 
-public class MJPEGCameraReader implements Runnable, IFrameReader
+public class CameraReader implements Runnable, IFrameReader
 {
     private final String videoUrl;
     private final int usbId;
@@ -21,7 +21,7 @@ public class MJPEGCameraReader implements Runnable, IFrameReader
      * Initializes a new instance of the MJPEGCameraReader class.
      * @param videoUrl to use to retrieve frame data
      */
-    public MJPEGCameraReader(String videoUrl)
+    public CameraReader(String videoUrl)
     {
         this.videoUrl = videoUrl;
         this.usbId = -1;
@@ -39,7 +39,7 @@ public class MJPEGCameraReader implements Runnable, IFrameReader
      * Initializes a new instance of the MJPEGCameraReader class.
      * @param usbId to use to identify a local USB camera
      */
-    public MJPEGCameraReader(int usbId)
+    public CameraReader(int usbId)
     {
         this.usbId = usbId;
         this.videoUrl = null;

@@ -1,17 +1,23 @@
 package frc.vision.writer;
 
 import org.opencv.core.Point;
-import frc.vision.IPointWriter;
+import frc.vision.IWriter;
 import frc.vision.VisionConstants;
 
-public class DebugPointWriter implements IPointWriter
+public class DebugPointWriter implements IWriter<Point>
 {
     public DebugPointWriter()
     {
     }
 
     @Override
-    public void writePoint(Point point)
+    public boolean open()
+    {
+		return true;
+	}
+
+    @Override
+    public void write(Point point)
     {
         if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT)
         {

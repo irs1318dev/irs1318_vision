@@ -42,6 +42,9 @@ public class VisionConstants
     public static final Scalar HSV_FILTER_LOW = new Scalar(70, 150, 150); 
     public static final Scalar HSV_FILTER_HIGH = new Scalar(90, 255, 255);
 
+    // Contour filtering constants
+    public static final double CONTOUR_MIN_AREA = 0.0;
+
     // Settings for outputs wiring
     // For Pi4J wiring information, see: http://pi4j.com/pins/model-3b-rev1.html
     public static final Pin DIGITAL_OUTPUT_PIN = RaspiPin.GPIO_00; // Pin 11, labeled 17 on the cobbler (next one past ground, on same side as SDA/SCL)

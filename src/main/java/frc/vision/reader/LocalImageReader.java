@@ -6,8 +6,9 @@ import frc.vision.IFrameReader;
 
 public class LocalImageReader implements IFrameReader
 {
-    private final String fileName;
-    private boolean wasRead;
+    private final boolean readForever;
+
+    private String fileName;
 
     /**
      * Initializes a new instance of the LocalImageReader class.
@@ -15,8 +16,19 @@ public class LocalImageReader implements IFrameReader
      */
     public LocalImageReader(String fileName)
     {
+        this(fileName, false);
+    }
+
+    /**
+     * Initializes a new instance of the LocalImageReader class.
+     * @param fileName of the file to read to select a frame
+     * @param readForever if we should keep reading the same image forever
+     */
+    public LocalImageReader(String fileName, boolean readForever)
+    {
+        this.readForever = readForever;
+
         this.fileName = fileName;
-        this.wasRead = false;
     }
 
     /**
@@ -27,13 +39,17 @@ public class LocalImageReader implements IFrameReader
     @Override
     public Mat getCurrentFrame() throws InterruptedException
     {
-        if (this.wasRead)
+        if (this.fileName == null)
         {
             return null;
         }
 
         Mat image = Imgcodecs.imread(this.fileName);
-        this.wasRead = true;
+        if (!this.readForever)
+        {
+            this.fileName = null;
+        }
+
         return image;
     }
 }
