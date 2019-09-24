@@ -15,7 +15,7 @@ public class Test
         //Thread cameraThread = new Thread(frameReader);
         //cameraThread.start();
 
-        LocalImageReader frameReader = new LocalImageReader("C:/devfrc/vision/samples/imageClose.jpg");
+        LocalImageReader frameReader = new LocalImageReader("src/test/resources/Capture1.PNG");
 
         HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer(new DebugPointWriter(), false);
 

@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
@@ -308,5 +311,21 @@ public class ContourHelper
         }
 
         return new Point(moments.get_m10() / moments.get_m00(), moments.get_m01() / moments.get_m00());
+    }
+
+    public static List<RotatedRect> findRectangles(Mat image, double minContourArea)
+    {
+        List<MatOfPoint> contours = ContourHelper.getAllContours(image, minContourArea);
+
+        List<RotatedRect> rotatedRect = new ArrayList<RotatedRect>(contours.size());
+        for (MatOfPoint contour : contours)
+        {
+            MatOfPoint2f newMop2f = new MatOfPoint2f();
+            contour.convertTo(newMop2f, CvType.CV_32FC2);
+            rotatedRect.add(Imgproc.minAreaRect(newMop2f));
+            contour.release();
+        }
+
+        return rotatedRect;
     }
 }

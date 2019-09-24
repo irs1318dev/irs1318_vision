@@ -6,5 +6,22 @@
 	],
 	"settings": {
 		"java.configuration.updateBuildConfiguration": "interactive"
+	},
+	"launch": {
+		"configurations": [
+			{
+				"type": "java",
+				"name": "Test (Launch)",
+				"request": "launch",
+				"mainClass": "frc.vision.Test"
+			},
+			{
+				"type": "java",
+				"name": "VisionSystem (Launch)",
+				"request": "launch",
+				"mainClass": "frc.vision.VisionSystem"
+			}
+		],
+		"compounds": []
 	}
 }

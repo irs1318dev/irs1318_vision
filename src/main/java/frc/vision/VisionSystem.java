@@ -4,7 +4,6 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import frc.vision.analyzer.*;
 import frc.vision.reader.*;
-import frc.vision.writer.AnalogPointWriter;
 import frc.vision.writer.DebugPointWriter;
 
 public class VisionSystem implements Runnable
@@ -111,8 +110,8 @@ public class VisionSystem implements Runnable
         }
         else
         {
-            cameraReader = new CameraReader(VisionConstants.CAMERA_MJPEG_URL);
-            cameraString = VisionConstants.CAMERA_MJPEG_URL;
+            cameraReader = new CameraReader(VisionConstants.DEFAULT_SETTING);
+            cameraString = "" + VisionConstants.DEFAULT_SETTING;
         }
 
         if (!cameraReader.open())
