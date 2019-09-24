@@ -19,7 +19,7 @@ dependencies
     compile "com.google.inject:guice:4.1.0:no_aop"
     compile "com.pi4j:pi4j-core:1.2"
 
-    implementation files(opencvJar)
+    compile files(opencvJar)
 
     testCompile "org.mockito:mockito-all:1.10.19"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.1.0"
@@ -40,7 +40,8 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'irs1318_vision',
                    'Implementation-Version': version,
-                    'Main-Class': mainClassName
+                   'Main-Class': mainClassName,
+                   'Class-Path': configurations.compile.collect{it.toURI().toString()}.join(' ')
     }
 }
 
