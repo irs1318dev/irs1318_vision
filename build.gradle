@@ -32,7 +32,7 @@ test {
     systemProperty "java.library.path", System.getenv('OPENCV_LIB')
 }
 
-mainClassName = 'frc.vision.VisionSystem'
+mainClassName = 'VisionSystem'
 
 // Setting up my Jar File.
 version = '1.0'
