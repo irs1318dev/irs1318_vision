@@ -2,7 +2,10 @@ package frc.vision.reader;
 
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
+
 import frc.vision.IFrameReader;
+import frc.vision.VisionConstants;
 
 public class CameraReader implements Runnable, IFrameReader
 {
@@ -68,6 +71,12 @@ public class CameraReader implements Runnable, IFrameReader
         {
             this.opened = this.vc.open(this.usbId);
         }
+
+        this.vc.set(Videoio.CAP_PROP_FRAME_WIDTH, VisionConstants.LIFECAM_CAMERA_RESOLUTION_X);
+        this.vc.set(Videoio.CAP_PROP_FRAME_HEIGHT, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
+        this.vc.set(Videoio.CAP_PROP_EXPOSURE, VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE);
+        this.vc.set(Videoio.CAP_PROP_BRIGHTNESS, VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS);
+        this.vc.set(Videoio.CAP_PROP_FPS, VisionConstants.LIFECAM_CAMERA_FPS);
 
         return this.opened;
     }
