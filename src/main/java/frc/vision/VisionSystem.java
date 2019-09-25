@@ -2,9 +2,12 @@ package frc.vision;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+
 import frc.vision.analyzer.*;
 import frc.vision.reader.*;
 import frc.vision.writer.DebugPointWriter;
+import frc.vision.writer.NetworkTablesPointWriter;
 
 public class VisionSystem implements Runnable
 {
@@ -120,7 +123,7 @@ public class VisionSystem implements Runnable
             System.exit(1);
         }
 
-        DebugPointWriter pointWriter = new DebugPointWriter();
+        IWriter<Point> pointWriter = new NetworkTablesPointWriter();
 
         if (!pointWriter.open())
         {

@@ -9,6 +9,10 @@ repositories
     mavenCentral()
     mavenLocal()
     gradlePluginPortal()
+
+    maven {
+        url "https://first.wpi.edu/FRC/roborio/maven/release/"
+    }
 }
 
 String opencvJar = System.getenv('OPENCV_JAR')
@@ -18,6 +22,7 @@ dependencies
     compile "com.google.guava:guava:21.0"
     compile "com.google.inject:guice:4.1.0:no_aop"
     compile "com.pi4j:pi4j-core:1.2"
+    compile "edu.wpi.first.ntcore:ntcore-java:2019.4.1"
 
     compile files(opencvJar)
 

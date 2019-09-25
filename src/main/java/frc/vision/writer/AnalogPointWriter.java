@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.opencv.core.Point;
 import frc.vision.IWriter;
+import frc.vision.VisionConstants;
 
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
@@ -85,6 +86,18 @@ public class AnalogPointWriter implements IWriter<Point>
             this.digitalOutput.setState(false);
             this.xOutput.fastWrite((int)0);
             this.yOutput.fastWrite((int)0);
+        }
+
+        if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT)
+        {
+            if (point != null)
+            {
+                System.out.println(String.format("Point: %f, %f", point.x, point.y));
+            }
+            else
+            {
+                System.out.println("Point not found");
+            }
         }
     }
 }
