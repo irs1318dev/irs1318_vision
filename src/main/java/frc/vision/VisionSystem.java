@@ -17,7 +17,7 @@ public class VisionSystem implements Runnable
     /**
      * Initializes a new instance of the VisionSystem class.
      * @param frameReader that reads frames from some source
-     * @param framePipeline that analyzes frames from some source
+     * @param framePipeline that processs frames from some source
      */
     public VisionSystem(IFrameReader frameReader, IFramePipeline framePipeline)
     {
@@ -31,15 +31,15 @@ public class VisionSystem implements Runnable
     @Override
     public void run()
     {
-        long analyzedFrames = 0;
+        long processdFrames = 0;
 
         try
         {
             long lastMeasured = System.currentTimeMillis();
-            while (this.captureAndAnalyze())
+            while (this.captureAndProcess())
             {
-                analyzedFrames++;
-                if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT && analyzedFrames % VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL == 0)
+                processdFrames++;
+                if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT && processdFrames % VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL == 0)
                 {
                     long elapsedTime = System.currentTimeMillis() - lastMeasured;
 
@@ -57,11 +57,11 @@ public class VisionSystem implements Runnable
     }
 
     /**
-     * Capture a frame from the frame reader and analyze that frame using the frame pipeline
+     * Capture a frame from the frame reader and process that frame using the frame pipeline
      * @return
      * @throws InterruptedException
      */
-    public boolean captureAndAnalyze()
+    public boolean captureAndProcess()
         throws InterruptedException
     {
         Mat image = this.frameReader.getCurrentFrame();
@@ -70,7 +70,7 @@ public class VisionSystem implements Runnable
             return false;
         }
 
-        this.framePipeline.analyzeFrame(image);
+        this.framePipeline.process(image);
         image.release();
         return true;
     }

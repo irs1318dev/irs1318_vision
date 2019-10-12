@@ -1,9 +1,13 @@
 package frc.vision.pipeline;
 
+import java.util.List;
+
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import frc.vision.IFramePipeline;
@@ -12,23 +16,39 @@ import frc.vision.VisionConstants;
 import frc.vision.helpers.ContourHelper;
 import frc.vision.helpers.HSVFilter;
 import frc.vision.helpers.ImageUndistorter;
+import frc.vision.helpers.OffsetVisionCalculator;
+import frc.vision.helpers.OffsetMeasurements;
 
-public class HSVCenterPipeline implements IFramePipeline
+public class HSVOffsetTargetRectanglePipeline implements IFramePipeline
 {
-    private final IWriter<Point> output;
+    private final OffsetVisionCalculator offsetCalculator;
+
+    private final IWriter<OffsetMeasurements> output;
     private final ImageUndistorter undistorter;
     private final HSVFilter hsvFilter;
     private int count;
 
     /**
-     * Initializes a new instance of the HSVCenterPipeline class.
+     * Initializes a new instance of the HSVOffsetTargetRectanglePipeline class.
      * @param output point writer
      * @param shouldUndistort whether to undistor the image or not
      */
-    public HSVCenterPipeline(
-        IWriter<Point> output,
+    public HSVOffsetTargetRectanglePipeline(
+        IWriter<OffsetMeasurements> output,
         boolean shouldUndistort)
     {
+        this.offsetCalculator = new OffsetVisionCalculator(
+            VisionConstants.LIFECAM_CAMERA_RESOLUTION_X,
+            VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y,
+            VisionConstants.LIFECAM_CAMERA_FOCAL_LENGTH_X,
+            VisionConstants.LIFECAM_CAMERA_FOCAL_LENGTH_Y,
+            VisionConstants.DOCKING_CAMERA_HORIZONTAL_MOUNTING_ANGLE,
+            VisionConstants.DOCKING_CAMERA_HORIZONTAL_MOUNTING_OFFSET,
+            VisionConstants.DOCKING_CAMERA_VERTICAL_MOUNTING_ANGLE,
+            VisionConstants.DOCKING_CAMERA_MOUNTING_HEIGHT,
+            VisionConstants.DOCKING_TAPE_OFFSET,
+            VisionConstants.ROCKET_TO_GROUND_TAPE_HEIGHT);
+
         this.output = output;
 
         if (shouldUndistort)
@@ -86,24 +106,32 @@ public class HSVCenterPipeline implements IFramePipeline
                 image);
         }
 
-        // third, find the largest contour.
-        MatOfPoint largestContour = ContourHelper.findLargestContour(image, VisionConstants.CONTOUR_MIN_AREA);
-        if (largestContour == null)
+        // third, find the largest rectangle within a contour.
+        List<RotatedRect> rectangles = ContourHelper.findRectangles(image, VisionConstants.CONTOUR_MIN_AREA);
+        if (rectangles == null || rectangles.size() <= 0)
         {
             if (VisionConstants.DEBUG &&
                 VisionConstants.DEBUG_PRINT_OUTPUT &&
                 VisionConstants.DEBUG_PRINT_PIPELINE_DATA)
             {
-                System.out.println("could not find any contour");
+                System.out.println("could not find any rectangles");
             }
         }
 
-        // fourth, find the center of mass for the largest contour
-        Point centerOfMass = null;
-        if (largestContour != null)
+        RotatedRect largestRect = rectangles.get(0);
+        for (RotatedRect currentRect : rectangles)
         {
-            centerOfMass = ContourHelper.findCenterOfMass(largestContour);
-            largestContour.release();
+            if (currentRect.size.area() > largestRect.size.area())
+            {
+                largestRect = currentRect;
+            }
+        }
+
+        // fourth, find the center for the largest rectangle
+        Point center = null;
+        if (largestRect != null)
+        {
+            center = largestRect.center;
         }
 
         if (VisionConstants.DEBUG)
@@ -111,29 +139,32 @@ public class HSVCenterPipeline implements IFramePipeline
             if (VisionConstants.DEBUG_PRINT_OUTPUT &&
                 VisionConstants.DEBUG_PRINT_PIPELINE_DATA)
             {
-                if (centerOfMass == null)
+                if (center == null)
                 {
-                    System.out.println("couldn't find the center of mass!");
+                    System.out.println("couldn't find the center!");
                 }
                 else
                 {
-                    System.out.println(String.format("Center of mass: %f, %f", centerOfMass.x, centerOfMass.y));
+                    System.out.println(String.format("Center: %f, %f", center.x, center.y));
                 }
             }
 
-            if (centerOfMass != null &&
+            if (center != null &&
                 VisionConstants.DEBUG_FRAME_OUTPUT &&
                 this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
             {
-                Imgproc.circle(undistortedImage, centerOfMass, 2, new Scalar(0, 0, 255), -1);
+                Imgproc.circle(undistortedImage, center, 2, new Scalar(0, 0, 255), -1);
                 Imgcodecs.imwrite(
                     String.format("%simage%d-3.redrawn.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
                     undistortedImage);
             }
         }
 
-        // finally, output that center of mass
-        this.output.write(centerOfMass);
+        // find the offset measurements based on the center of the rectangle we selected
+        OffsetMeasurements measurements = this.offsetCalculator.calculate(center);
+
+        // finally, output the measurements
+        this.output.write(measurements);
 
         undistortedImage.release();
     }

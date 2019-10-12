@@ -12,23 +12,39 @@ import frc.vision.VisionConstants;
 import frc.vision.helpers.ContourHelper;
 import frc.vision.helpers.HSVFilter;
 import frc.vision.helpers.ImageUndistorter;
+import frc.vision.helpers.OffsetVisionCalculator;
+import frc.vision.helpers.OffsetMeasurements;
 
-public class HSVCenterPipeline implements IFramePipeline
+public class HSVOffsetTargetPipeline implements IFramePipeline
 {
-    private final IWriter<Point> output;
+    private final OffsetVisionCalculator offsetCalculator;
+
+    private final IWriter<OffsetMeasurements> output;
     private final ImageUndistorter undistorter;
     private final HSVFilter hsvFilter;
     private int count;
 
     /**
-     * Initializes a new instance of the HSVCenterPipeline class.
+     * Initializes a new instance of the HSVOffsetTargetPipeline class.
      * @param output point writer
      * @param shouldUndistort whether to undistor the image or not
      */
-    public HSVCenterPipeline(
-        IWriter<Point> output,
+    public HSVOffsetTargetPipeline(
+        IWriter<OffsetMeasurements> output,
         boolean shouldUndistort)
     {
+        this.offsetCalculator = new OffsetVisionCalculator(
+            VisionConstants.LIFECAM_CAMERA_RESOLUTION_X,
+            VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y,
+            VisionConstants.LIFECAM_CAMERA_FOCAL_LENGTH_X,
+            VisionConstants.LIFECAM_CAMERA_FOCAL_LENGTH_Y,
+            VisionConstants.DOCKING_CAMERA_HORIZONTAL_MOUNTING_ANGLE,
+            VisionConstants.DOCKING_CAMERA_HORIZONTAL_MOUNTING_OFFSET,
+            VisionConstants.DOCKING_CAMERA_VERTICAL_MOUNTING_ANGLE,
+            VisionConstants.DOCKING_CAMERA_MOUNTING_HEIGHT,
+            VisionConstants.DOCKING_TAPE_OFFSET,
+            VisionConstants.ROCKET_TO_GROUND_TAPE_HEIGHT);
+
         this.output = output;
 
         if (shouldUndistort)
@@ -132,8 +148,11 @@ public class HSVCenterPipeline implements IFramePipeline
             }
         }
 
+        // find the offset measurements based on the center of mass of the contour we selected
+        OffsetMeasurements measurements = this.offsetCalculator.calculate(centerOfMass);
+
         // finally, output that center of mass
-        this.output.write(centerOfMass);
+        this.output.write(measurements);
 
         undistortedImage.release();
     }

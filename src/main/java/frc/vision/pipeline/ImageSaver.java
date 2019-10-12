@@ -20,11 +20,11 @@ public class ImageSaver implements IFramePipeline
     }
 
     /**
-     * Analyze a single image frame
-     * @param frame image to analyze
+     * Process a single image frame
+     * @param frame image to process
      */
     @Override
-    public void analyzeFrame(Mat image)
+    public void process(Mat image)
     {
         String fileName = String.format("%simage%s.jpg", this.directory, this.count);
         if (Imgcodecs.imwrite(fileName, image))

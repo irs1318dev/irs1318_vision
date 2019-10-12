@@ -38,7 +38,7 @@ public class HSVCenterPipelineTest
         IWriter<Point> pointWriter = (IWriter<Point>)mock(IWriter.class);
         IFrameReader frameReader = mock(IFrameReader.class);
 
-        boolean canCaptureAndAnalyze = false;
+        boolean canCaptureAndProcess = false;
         try
         {
             Mat mat = Imgcodecs.imread(HSVCenterPipelineTest.RepoPath + imagePath);
@@ -47,7 +47,7 @@ public class HSVCenterPipelineTest
             HSVCenterPipeline pipeline = new HSVCenterPipeline(pointWriter, false);
 
             VisionSystem vs = new VisionSystem(frameReader, pipeline);
-            canCaptureAndAnalyze = vs.captureAndAnalyze();
+            canCaptureAndProcess = vs.captureAndProcess();
 
             verify(pointWriter).write(eq(new Point(x, y)));
             verify(frameReader).getCurrentFrame();
@@ -60,6 +60,6 @@ public class HSVCenterPipelineTest
             fail(ex.toString());
         }
 
-        assertTrue(canCaptureAndAnalyze);
+        assertTrue(canCaptureAndProcess);
     }
 }
