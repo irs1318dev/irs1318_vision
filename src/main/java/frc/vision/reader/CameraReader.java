@@ -82,7 +82,7 @@ public class CameraReader implements Runnable, IFrameReader
     }
 
     /**
-     * Run the thread that captures frames and buffers the most recently retrieved frame so that an analyzer can use it.
+     * Run the thread that captures frames and buffers the most recently retrieved frame so that an pipeline can use it.
      */
     @Override
     public void run()

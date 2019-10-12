@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.*;
 
-import frc.vision.analyzer.HSVCenterAnalyzer;
+import frc.vision.pipeline.HSVCenterPipeline;
 
-public class HSVCenterAnalyzerTest
+public class HSVCenterPipelineTest
 {
     private static final String RepoPath = "src/test/resources/";
 
@@ -41,12 +41,12 @@ public class HSVCenterAnalyzerTest
         boolean canCaptureAndAnalyze = false;
         try
         {
-            Mat mat = Imgcodecs.imread(HSVCenterAnalyzerTest.RepoPath + imagePath);
+            Mat mat = Imgcodecs.imread(HSVCenterPipelineTest.RepoPath + imagePath);
             doReturn(mat).when(frameReader).getCurrentFrame();
 
-            HSVCenterAnalyzer analyzer = new HSVCenterAnalyzer(pointWriter, false);
+            HSVCenterPipeline pipeline = new HSVCenterPipeline(pointWriter, false);
 
-            VisionSystem vs = new VisionSystem(frameReader, analyzer);
+            VisionSystem vs = new VisionSystem(frameReader, pipeline);
             canCaptureAndAnalyze = vs.captureAndAnalyze();
 
             verify(pointWriter).write(eq(new Point(x, y)));

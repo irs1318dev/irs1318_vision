@@ -1,4 +1,4 @@
-package frc.vision.analyzer;
+package frc.vision.pipeline;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -6,14 +6,14 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import frc.vision.IFrameAnalyzer;
+import frc.vision.IFramePipeline;
 import frc.vision.IWriter;
 import frc.vision.VisionConstants;
 import frc.vision.helpers.ContourHelper;
 import frc.vision.helpers.HSVFilter;
 import frc.vision.helpers.ImageUndistorter;
 
-public class HSVCenterAnalyzer implements IFrameAnalyzer
+public class HSVCenterPipeline implements IFramePipeline
 {
     private final IWriter<Point> output;
     private final ImageUndistorter undistorter;
@@ -21,11 +21,11 @@ public class HSVCenterAnalyzer implements IFrameAnalyzer
     private int count;
 
     /**
-     * Initializes a new instance of the HSVCenterAnalyzer class.
+     * Initializes a new instance of the HSVCenterPipeline class.
      * @param output point writer
      * @param shouldUndistort whether to undistor the image or not
      */
-    public HSVCenterAnalyzer(
+    public HSVCenterPipeline(
         IWriter<Point> output,
         boolean shouldUndistort)
     {
@@ -92,7 +92,7 @@ public class HSVCenterAnalyzer implements IFrameAnalyzer
         {
             if (VisionConstants.DEBUG &&
                 VisionConstants.DEBUG_PRINT_OUTPUT &&
-                VisionConstants.DEBUG_PRINT_ANALYZER_DATA)
+                VisionConstants.DEBUG_PRINT_PIPELINE_DATA)
             {
                 System.out.println("could not find any contour");
             }
@@ -109,7 +109,7 @@ public class HSVCenterAnalyzer implements IFrameAnalyzer
         if (VisionConstants.DEBUG)
         {
             if (VisionConstants.DEBUG_PRINT_OUTPUT &&
-                VisionConstants.DEBUG_PRINT_ANALYZER_DATA)
+                VisionConstants.DEBUG_PRINT_PIPELINE_DATA)
             {
                 if (centerOfMass == null)
                 {

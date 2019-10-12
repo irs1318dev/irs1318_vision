@@ -2,7 +2,7 @@ package frc.vision;
 
 import org.opencv.core.Mat;
 
-public interface IFrameAnalyzer
+public interface IFramePipeline
 {
     /**
      * Analyze a single image frame

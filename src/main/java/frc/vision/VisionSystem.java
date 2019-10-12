@@ -4,7 +4,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
-import frc.vision.analyzer.*;
+import frc.vision.pipeline.*;
 import frc.vision.reader.*;
 import frc.vision.writer.DebugPointWriter;
 import frc.vision.writer.NetworkTablesPointWriter;
@@ -12,17 +12,17 @@ import frc.vision.writer.NetworkTablesPointWriter;
 public class VisionSystem implements Runnable
 {
     private IFrameReader frameReader;
-    private IFrameAnalyzer frameAnalyzer;
+    private IFramePipeline framePipeline;
 
     /**
      * Initializes a new instance of the VisionSystem class.
      * @param frameReader that reads frames from some source
-     * @param frameAnalyzer that analyzes frames from some source
+     * @param framePipeline that analyzes frames from some source
      */
-    public VisionSystem(IFrameReader frameReader, IFrameAnalyzer frameAnalyzer)
+    public VisionSystem(IFrameReader frameReader, IFramePipeline framePipeline)
     {
         this.frameReader = frameReader;
-        this.frameAnalyzer = frameAnalyzer;
+        this.framePipeline = framePipeline;
     }
 
     /**
@@ -57,7 +57,7 @@ public class VisionSystem implements Runnable
     }
 
     /**
-     * Capture a frame from the frame reader and analyze that frame using the frame analyzer
+     * Capture a frame from the frame reader and analyze that frame using the frame pipeline
      * @return
      * @throws InterruptedException
      */
@@ -70,7 +70,7 @@ public class VisionSystem implements Runnable
             return false;
         }
 
-        this.frameAnalyzer.analyzeFrame(image);
+        this.framePipeline.analyzeFrame(image);
         image.release();
         return true;
     }
@@ -134,9 +134,9 @@ public class VisionSystem implements Runnable
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
-        HSVCenterAnalyzer frameAnalyzer = new HSVCenterAnalyzer(pointWriter, false);
+        HSVCenterPipeline framePipeline = new HSVCenterPipeline(pointWriter, false);
 
-        VisionSystem visionSystem = new VisionSystem(cameraReader, frameAnalyzer);
+        VisionSystem visionSystem = new VisionSystem(cameraReader, framePipeline);
 
         Thread visionThread = new Thread(visionSystem);
         visionThread.run();

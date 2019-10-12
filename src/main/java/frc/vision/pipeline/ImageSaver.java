@@ -1,10 +1,10 @@
-package frc.vision.analyzer;
+package frc.vision.pipeline;
 
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
-import frc.vision.IFrameAnalyzer;
+import frc.vision.IFramePipeline;
 
-public class ImageSaver implements IFrameAnalyzer
+public class ImageSaver implements IFramePipeline
 {
     private final String directory;
     private int count;
