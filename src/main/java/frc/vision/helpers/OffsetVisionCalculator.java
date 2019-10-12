@@ -4,7 +4,7 @@ import org.opencv.core.Point;
 
 import frc.vision.VisionConstants;
 
-public class OffsetVision
+public class OffsetVisionCalculator
 {
     private final double centerWidth;
     private final double centerHeight;
@@ -19,7 +19,7 @@ public class OffsetVision
     private final double horizontalTargetOffset;
     private final double verticalTargetOffset;
 
-    public OffsetVision(
+    public OffsetVisionCalculator(
         double resolutionX,
         double resolutionY,
         double fovX,
