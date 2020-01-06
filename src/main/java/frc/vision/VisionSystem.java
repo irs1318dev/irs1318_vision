@@ -6,8 +6,7 @@ import org.opencv.core.Point;
 
 import frc.vision.pipeline.*;
 import frc.vision.reader.*;
-import frc.vision.writer.DebugPointWriter;
-import frc.vision.writer.NetworkTablesPointWriter;
+import frc.vision.writer.*;
 
 public class VisionSystem implements Runnable
 {
