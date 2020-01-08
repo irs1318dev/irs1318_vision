@@ -122,7 +122,7 @@ public class VisionSystem implements Runnable
             System.exit(1);
         }
 
-        IWriter<Point> pointWriter = new NetworkTablesPointWriter();
+        IWriter<Point> pointWriter = new DebugPointWriter();
 
         if (!pointWriter.open())
         {
