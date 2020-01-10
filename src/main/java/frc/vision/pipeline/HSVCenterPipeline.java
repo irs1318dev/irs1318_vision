@@ -134,6 +134,7 @@ public class HSVCenterPipeline implements IFramePipeline
 
         // finally, output that center of mass
         this.output.write(centerOfMass);
+        this.output.outputFrame(image);
 
         undistortedImage.release();
     }

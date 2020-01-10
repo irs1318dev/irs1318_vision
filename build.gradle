@@ -36,6 +36,8 @@ dependencies
     compile "edu.wpi.first.wpiutil:wpiutil-jni:2020.1.2:" + platform
     compile "edu.wpi.first.ntcore:ntcore-java:2020.1.2"
     compile "edu.wpi.first.ntcore:ntcore-jni:2020.1.2:" + platform
+    compile "edu.wpi.first.cscore:cscore-java:2020.1.2"
+    compile "edu.wpi.first.cscore:cscore-jni:2020.1.2:" + platform
 
     compile files(opencvJar)
 

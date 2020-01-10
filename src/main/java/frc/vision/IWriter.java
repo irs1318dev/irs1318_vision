@@ -1,5 +1,7 @@
 package frc.vision;
 
+import org.opencv.core.Mat;
+
 public interface IWriter<T>
 {
     /**
@@ -13,4 +15,10 @@ public interface IWriter<T>
      * @param result to write
      */
     public void write(T result);
+
+    /**
+     * Output a camera frame
+     * @param frame to output
+     */
+    public void outputFrame(Mat frame);
 }

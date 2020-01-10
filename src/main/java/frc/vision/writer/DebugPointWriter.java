@@ -1,5 +1,6 @@
 package frc.vision.writer;
 
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import frc.vision.IWriter;
 import frc.vision.VisionConstants;
@@ -13,8 +14,8 @@ public class DebugPointWriter implements IWriter<Point>
     @Override
     public boolean open()
     {
-		return true;
-	}
+        return true;
+    }
 
     @Override
     public void write(Point point)
@@ -30,5 +31,10 @@ public class DebugPointWriter implements IWriter<Point>
                 System.out.println("Point not found");
             }
         }
+    }
+
+    @Override
+    public void outputFrame(Mat frame)
+    {
     }
 }

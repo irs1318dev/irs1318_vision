@@ -2,6 +2,7 @@ package frc.vision.writer;
 
 import java.io.IOException;
 
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import frc.vision.IWriter;
 import frc.vision.VisionConstants;
@@ -99,5 +100,10 @@ public class AnalogPointWriter implements IWriter<Point>
                 System.out.println("Point not found");
             }
         }
+    }
+
+    @Override
+    public void outputFrame(Mat frame)
+    {
     }
 }

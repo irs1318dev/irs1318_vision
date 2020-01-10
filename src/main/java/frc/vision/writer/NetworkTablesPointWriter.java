@@ -1,10 +1,13 @@
 package frc.vision.writer;
 
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.cscore.*;
+import edu.wpi.cscore.VideoMode.PixelFormat;
 
 import frc.vision.IWriter;
 import frc.vision.VisionConstants;
@@ -14,10 +17,14 @@ public class NetworkTablesPointWriter implements IWriter<Point>
     private NetworkTableEntry xEntry;
     private NetworkTableEntry yEntry;
 
+    private CvSource frameWriter;
+
     public NetworkTablesPointWriter()
     {
         this.xEntry = null;
         this.yEntry = null;
+
+        this.frameWriter = null;
     }
 
     @Override
@@ -29,6 +36,8 @@ public class NetworkTablesPointWriter implements IWriter<Point>
         this.yEntry = table.getEntry("v.y");
         inst.startClientTeam(1318);
 
+        this.frameWriter = new CvSource("v", PixelFormat.kMJPEG, 320, 240, 30);
+
         return true;
     }
 
@@ -37,8 +46,8 @@ public class NetworkTablesPointWriter implements IWriter<Point>
     {
         if (point == null)
         {
-            this.xEntry.setDouble(-0.0);
-            this.yEntry.setDouble(-0.0);
+            this.xEntry.setDouble(-1318.0);
+            this.yEntry.setDouble(-1318.0);
         }
         else
         {
@@ -56,6 +65,15 @@ public class NetworkTablesPointWriter implements IWriter<Point>
             {
                 System.out.println("Point not found");
             }
+        }
+    }
+
+    @Override
+    public void outputFrame(Mat frame)
+    {
+        if (VisionConstants.ENABLE_CAMERA_STREAM)
+        {
+            this.frameWriter.putFrame(frame);
         }
     }
 }

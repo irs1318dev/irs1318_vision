@@ -123,7 +123,6 @@ public class VisionSystem implements Runnable
         }
 
         IWriter<Point> pointWriter = new NetworkTablesPointWriter();
-
         if (!pointWriter.open())
         {
             System.err.println("unable to open point writer!");
