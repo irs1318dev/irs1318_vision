@@ -3,6 +3,7 @@ package frc.vision;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -50,6 +51,7 @@ public class HSVCenterPipelineTest
             canCaptureAndProcess = vs.captureAndProcess();
 
             verify(pointWriter).write(eq(new Point(x, y)));
+            verify(pointWriter).outputFrame(anyObject());
             verify(frameReader).getCurrentFrame();
 
             verifyNoMoreInteractions(pointWriter);
