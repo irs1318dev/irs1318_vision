@@ -43,7 +43,7 @@ public class NetworkTablesPointWriter implements IWriter<Point>
         else
         {
             this.xEntry.setDouble(point.x);
-            this.xEntry.setDouble(point.y);
+            this.yEntry.setDouble(point.y);
         }
 
         if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT)
