@@ -1,16 +1,22 @@
 package frc.vision.reader;
 
 import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoCamera;
+import edu.wpi.first.cameraserver.*;
 
 import frc.vision.IFrameReader;
 import frc.vision.VisionConstants;
 
-public class CameraReader implements Runnable, IFrameReader
+public class WpilibCameraReader implements Runnable, IFrameReader
 {
     private final String videoUrl;
     private final int usbId;
+
+    private VideoCamera camera;
+    private CvSink cvSink;
 
     private Object lock;
     private Mat currentFrame;
@@ -18,13 +24,12 @@ public class CameraReader implements Runnable, IFrameReader
     private boolean stop;
 
     private boolean opened;
-    private VideoCapture vc;
 
     /**
-     * Initializes a new instance of the CameraReader class.
+     * Initializes a new instance of the WpilibCameraReader class.
      * @param videoUrl to use to retrieve frame data
      */
-    public CameraReader(String videoUrl)
+    public WpilibCameraReader(String videoUrl)
     {
         this.videoUrl = videoUrl;
         this.usbId = -1;
@@ -35,14 +40,15 @@ public class CameraReader implements Runnable, IFrameReader
         this.stop = false;
 
         this.opened = false;
-        this.vc = null;
+        this.camera = null;
+        this.cvSink = null;
     }
 
     /**
-     * Initializes a new instance of the CameraReader class.
+     * Initializes a new instance of the WpilibCameraReader class.
      * @param usbId to use to identify a local USB camera
      */
-    public CameraReader(int usbId)
+    public WpilibCameraReader(int usbId)
     {
         this.usbId = usbId;
         this.videoUrl = null;
@@ -53,7 +59,7 @@ public class CameraReader implements Runnable, IFrameReader
         this.stop = false;
 
         this.opened = false;
-        this.vc = null;
+        this.camera = null;
     }
 
     /**
@@ -62,21 +68,25 @@ public class CameraReader implements Runnable, IFrameReader
      */
     public boolean open()
     {
-        this.vc = new VideoCapture();
+        this.cvSink = new CvSink("Camera Sink");
         if (this.videoUrl != null)
         {
-            this.opened = this.vc.open(this.videoUrl);
+            this.camera = CameraServer.getInstance().addAxisCamera(this.videoUrl);
+            this.opened = true;
         }
         else
         {
-            this.opened = this.vc.open(this.usbId);
-        }
+            UsbCamera usbCamera = CameraServer.getInstance().startAutomaticCapture(this.usbId);
 
-        this.vc.set(Videoio.CAP_PROP_FRAME_WIDTH, VisionConstants.LIFECAM_CAMERA_RESOLUTION_X);
-        this.vc.set(Videoio.CAP_PROP_FRAME_HEIGHT, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
-        this.vc.set(Videoio.CAP_PROP_EXPOSURE, VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE);
-        this.vc.set(Videoio.CAP_PROP_BRIGHTNESS, VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS);
-        this.vc.set(Videoio.CAP_PROP_FPS, VisionConstants.LIFECAM_CAMERA_FPS);
+            usbCamera.setResolution(VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
+            usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE);
+            usbCamera.setBrightness(VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS);
+            usbCamera.setFPS(VisionConstants.LIFECAM_CAMERA_FPS);
+
+            this.camera = usbCamera;
+            this.cvSink.setSource(this.camera);
+            this.opened = true;
+        }
 
         return this.opened;
     }
@@ -93,14 +103,17 @@ public class CameraReader implements Runnable, IFrameReader
             while (!this.stop)
             {
                 image = new Mat();
-                if (this.vc.read(image))
+                long result = this.cvSink.grabFrame(image);
+                if (result != 0)
                 {
                     this.setCurrentFrame(image);
                 }
             }
-        }
 
-        this.vc.release();
+            this.cvSink.close();
+            this.camera.close();
+            this.opened = false;
+        }
     }
 
     /**

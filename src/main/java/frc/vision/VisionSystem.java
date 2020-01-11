@@ -83,7 +83,7 @@ public class VisionSystem implements Runnable
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         String cameraString;
-        CameraReader cameraReader;
+        IFrameReader cameraReader;
         if (args != null && args.length != 0 && args[0] != null && !args[0].equals(""))
         {
             String argument = args[0];
@@ -112,7 +112,7 @@ public class VisionSystem implements Runnable
         }
         else
         {
-            cameraReader = new CameraReader(VisionConstants.DEFAULT_SETTING);
+            cameraReader = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING);
             cameraString = "" + VisionConstants.DEFAULT_SETTING;
         }
 

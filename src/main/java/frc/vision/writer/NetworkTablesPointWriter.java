@@ -3,6 +3,7 @@ package frc.vision.writer;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -36,7 +37,10 @@ public class NetworkTablesPointWriter implements IWriter<Point>
         this.yEntry = table.getEntry("v.y");
         inst.startClientTeam(1318);
 
-        this.frameWriter = new CvSource("v", PixelFormat.kMJPEG, 320, 240, 30);
+        if (VisionConstants.ENABLE_CAMERA_STREAM)
+        {
+            this.frameWriter = CameraServer.getInstance().putVideo("rpiCameraOutput", VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
+        }
 
         return true;
     }

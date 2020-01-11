@@ -9,6 +9,7 @@ public class LocalImageReader implements IFrameReader
     private final boolean readForever;
 
     private String fileName;
+    private boolean stop;
 
     /**
      * Initializes a new instance of the LocalImageReader class.
@@ -29,6 +30,7 @@ public class LocalImageReader implements IFrameReader
         this.readForever = readForever;
 
         this.fileName = fileName;
+        this.stop = false;
     }
 
     /**
@@ -51,5 +53,33 @@ public class LocalImageReader implements IFrameReader
         }
 
         return image;
+    }
+
+    /**
+     * Open the frame reader
+     * @return true if successful
+     */
+    @Override
+    public boolean open()
+    {
+        return true;
+    }
+
+    /**
+     * Run the thread that captures frames and buffers the most recently retrieved frame so that an pipeline can use it.
+     */
+    @Override
+    public void run()
+    {
+        while (!this.stop);
+    }
+
+    /**
+     * stop retrieving frames
+     */
+    @Override
+    public void stop()
+    {
+        this.stop = true;
     }
 }
