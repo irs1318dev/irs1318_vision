@@ -37,9 +37,9 @@ public class NetworkTablesPointWriter implements IWriter<Point>
         this.yEntry = table.getEntry("v.y");
         inst.startClientTeam(1318);
 
-        if (VisionConstants.ENABLE_CAMERA_STREAM)
+        if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_STREAM)
         {
-            this.frameWriter = CameraServer.getInstance().putVideo("rpiCameraOutput", VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
+            this.frameWriter = CameraServer.getInstance().putVideo("RPI-debug", VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
         }
 
         return true;
@@ -75,7 +75,8 @@ public class NetworkTablesPointWriter implements IWriter<Point>
     @Override
     public void outputFrame(Mat frame)
     {
-        if (VisionConstants.ENABLE_CAMERA_STREAM)
+        if (VisionConstants.DEBUG &&
+            VisionConstants.DEBUG_FRAME_STREAM)
         {
             this.frameWriter.putFrame(frame);
         }

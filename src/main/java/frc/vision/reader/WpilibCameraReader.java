@@ -71,12 +71,12 @@ public class WpilibCameraReader implements Runnable, IFrameReader
         this.cvSink = new CvSink("Camera Sink");
         if (this.videoUrl != null)
         {
-            this.camera = CameraServer.getInstance().addAxisCamera(this.videoUrl);
+            this.camera = CameraServer.getInstance().addAxisCamera(VisionConstants.CAMERA_NAME, this.videoUrl);
             this.opened = true;
         }
         else
         {
-            UsbCamera usbCamera = CameraServer.getInstance().startAutomaticCapture(this.usbId);
+            UsbCamera usbCamera = CameraServer.getInstance().startAutomaticCapture(VisionConstants.CAMERA_NAME, this.usbId);
 
             usbCamera.setResolution(VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
             usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE);
