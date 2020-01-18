@@ -51,7 +51,7 @@ public class HSVCenterPipelineTest
             canCaptureAndProcess = vs.captureAndProcess();
 
             verify(pointWriter).write(eq(new Point(x, y)));
-            verify(pointWriter).outputFrame(anyObject());
+            //verify(pointWriter).outputFrame(anyObject());
             verify(frameReader).getCurrentFrame();
 
             verifyNoMoreInteractions(pointWriter);

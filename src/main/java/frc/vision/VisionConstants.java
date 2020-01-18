@@ -15,15 +15,14 @@ public class VisionConstants
 
     // Default camera settings:
     public static final int DEFAULT_SETTING = 0;
-
-    // Whether to output to the stream or not...
-	public static final boolean ENABLE_CAMERA_STREAM = true;
+    public static final String CAMERA_NAME = "RPI-raw";
 
     // Debug output settings:
     public static final boolean DEBUG = true;
     public static final boolean DEBUG_PRINT_OUTPUT = false;
     public static final boolean DEBUG_PRINT_PIPELINE_DATA = false;
     public static final int DEBUG_FPS_AVERAGING_INTERVAL = 30;
+	public static final boolean DEBUG_FRAME_STREAM = true;
     public static final boolean DEBUG_FRAME_OUTPUT = false;
     public static final int DEBUG_FRAME_OUTPUT_GAP = 30; // the number of frames to wait between saving debug image output
     public static final String DEBUG_OUTPUT_FOLDER = "/home/pi/vision/";
