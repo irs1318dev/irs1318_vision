@@ -28,16 +28,16 @@ public class VisionConstants
     public static final String DEBUG_OUTPUT_FOLDER = "/home/pi/vision/";
 
     // Settings for Microsoft LifeCam HD-3000 USB-based camera
-    public static final int LIFECAM_CAMERA_RESOLUTION_X = 320;
-    public static final int LIFECAM_CAMERA_RESOLUTION_Y = 240;
-    public static final double LIFECAM_CAMERA_FIELD_OF_VIEW_X = 48.4; // 4:3 field of view along x axis. note that documentation says 68.5 degrees diagonal (at 16:9), so this is an estimate.
-    public static final double LIFECAM_CAMERA_FIELD_OF_VIEW_Y = 36.3; // 4:3 field of view along y axis
-    public static final double LIFECAM_CAMERA_FOCAL_LENGTH_X = 356.016; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
-    public static final double LIFECAM_CAMERA_FOCAL_LENGTH_Y = 366.058; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
+    public static final int LIFECAM_CAMERA_RESOLUTION_X = 1280;
+    public static final int LIFECAM_CAMERA_RESOLUTION_Y = 720;
+    public static final double LIFECAM_CAMERA_FIELD_OF_VIEW_X = 61.37272; // 16:9 field of view along x axis https://vrguy.blogspot.com/2013/04/converting-diagonal-field-of-view-and.html to convert from 68.5 degrees diagonal.
+    public static final double LIFECAM_CAMERA_FIELD_OF_VIEW_Y = 36.91875; // 16:9 field of view along y axis
+    public static final double LIFECAM_CAMERA_FOCAL_LENGTH_X = 1078.4675; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
+    public static final double LIFECAM_CAMERA_FOCAL_LENGTH_Y = 1078.4675; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
     public static final int LIFECAM_CAMERA_VISION_EXPOSURE = 1;
     public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS = 1;
     public static final int LIFECAM_CAMERA_OPERATOR_BRIGHTNESS = 35;
-    public static final int LIFECAM_CAMERA_FPS = 20; // Max supported value is 30
+    public static final int LIFECAM_CAMERA_FPS = 30; // Max supported value is 30
 
     // HSV Filtering constants
     public static final Scalar HSV_FILTER_LOW = new Scalar(70, 150, 150); 
