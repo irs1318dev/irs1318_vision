@@ -45,6 +45,7 @@ public class AnalogPointWriter implements IWriter<Point>
      * Opens the AnalogPointWriter
      * @return true if the writer was successfully opened
      */
+    @Override
     public boolean open()
     {
         try
@@ -74,6 +75,7 @@ public class AnalogPointWriter implements IWriter<Point>
      * Write a point
      * @param point to write
      */
+    @Override
     public void write(Point point)
     {
         if (point != null)

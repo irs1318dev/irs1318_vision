@@ -6,6 +6,8 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+
+import frc.vision.IController;
 import frc.vision.IFramePipeline;
 import frc.vision.IWriter;
 import frc.vision.VisionConstants;
@@ -16,6 +18,8 @@ import frc.vision.helpers.ImageUndistorter;
 public class HSVCenterPipeline implements IFramePipeline
 {
     private final IWriter<Point> output;
+    private final IController controller;
+
     private final ImageUndistorter undistorter;
     private final HSVFilter hsvFilter;
     private int count;
@@ -23,13 +27,16 @@ public class HSVCenterPipeline implements IFramePipeline
     /**
      * Initializes a new instance of the HSVCenterPipeline class.
      * @param output point writer
+     * @param controller to check for pieces being enabled
      * @param shouldUndistort whether to undistor the image or not
      */
     public HSVCenterPipeline(
         IWriter<Point> output,
+        IController controller,
         boolean shouldUndistort)
     {
         this.output = output;
+        this.controller = controller;
 
         if (shouldUndistort)
         {
@@ -51,6 +58,11 @@ public class HSVCenterPipeline implements IFramePipeline
     @Override
     public void process(Mat image)
     {
+        if (!this.controller.getProcessingEnabled())
+        {
+            return;
+        }
+
         this.count++;
 
         // first, undistort the image.
@@ -132,7 +144,7 @@ public class HSVCenterPipeline implements IFramePipeline
                         String.format("%simage%d-3.redrawn.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
                         undistortedImage);
                 }
-                
+
                 if (VisionConstants.DEBUG_FRAME_STREAM)
                 {
                     this.output.outputFrame(undistortedImage);

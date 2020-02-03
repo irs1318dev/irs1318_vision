@@ -66,6 +66,7 @@ public class WpilibCameraReader implements Runnable, IFrameReader
      * Opens the camera reader
      * @return true if we were able to open the camera reader
      */
+    @Override
     public boolean open()
     {
         this.cvSink = new CvSink("Camera Sink");

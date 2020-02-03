@@ -6,6 +6,8 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+
+import frc.vision.IController;
 import frc.vision.IFramePipeline;
 import frc.vision.IWriter;
 import frc.vision.VisionConstants;
@@ -20,6 +22,8 @@ public class HSVOffsetTargetPipeline implements IFramePipeline
     private final OffsetVisionCalculator offsetCalculator;
 
     private final IWriter<OffsetMeasurements> output;
+    private final IController controller;
+
     private final ImageUndistorter undistorter;
     private final HSVFilter hsvFilter;
     private int count;
@@ -27,10 +31,12 @@ public class HSVOffsetTargetPipeline implements IFramePipeline
     /**
      * Initializes a new instance of the HSVOffsetTargetPipeline class.
      * @param output point writer
+     * @param controller to check for pieces being enabled
      * @param shouldUndistort whether to undistor the image or not
      */
     public HSVOffsetTargetPipeline(
         IWriter<OffsetMeasurements> output,
+        IController controller,
         boolean shouldUndistort)
     {
         this.offsetCalculator = new OffsetVisionCalculator(
@@ -46,6 +52,7 @@ public class HSVOffsetTargetPipeline implements IFramePipeline
             VisionConstants.ROCKET_TO_GROUND_TAPE_HEIGHT);
 
         this.output = output;
+        this.controller = controller;
 
         if (shouldUndistort)
         {
@@ -67,6 +74,11 @@ public class HSVOffsetTargetPipeline implements IFramePipeline
     @Override
     public void process(Mat image)
     {
+        if (!this.controller.getProcessingEnabled())
+        {
+            return;
+        }
+
         this.count++;
 
         // first, undistort the image.

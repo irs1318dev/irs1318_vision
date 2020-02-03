@@ -6,21 +6,20 @@ import org.opencv.core.Point;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.cscore.*;
-import edu.wpi.cscore.VideoMode.PixelFormat;
 
 import frc.vision.IWriter;
 import frc.vision.VisionConstants;
+import frc.vision.helpers.NetworkTableHelper;
 
-public class NetworkTablesPointWriter implements IWriter<Point>
+public class NetworkTablePointWriter implements IWriter<Point>
 {
     private NetworkTableEntry xEntry;
     private NetworkTableEntry yEntry;
 
     private CvSource frameWriter;
 
-    public NetworkTablesPointWriter()
+    public NetworkTablePointWriter()
     {
         this.xEntry = null;
         this.yEntry = null;
@@ -31,11 +30,9 @@ public class NetworkTablesPointWriter implements IWriter<Point>
     @Override
     public boolean open()
     {
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        NetworkTable table = inst.getTable("SmartDashboard");
+        NetworkTable table = NetworkTableHelper.getSmartDashboard();
         this.xEntry = table.getEntry("v.x");
         this.yEntry = table.getEntry("v.y");
-        inst.startClientTeam(1318);
 
         if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_STREAM)
         {

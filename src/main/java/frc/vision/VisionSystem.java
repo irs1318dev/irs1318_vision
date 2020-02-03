@@ -4,6 +4,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
+import frc.vision.controller.NetworkTableController;
 import frc.vision.pipeline.*;
 import frc.vision.reader.*;
 import frc.vision.writer.*;
@@ -122,17 +123,24 @@ public class VisionSystem implements Runnable
             System.exit(1);
         }
 
-        IWriter<Point> pointWriter = new NetworkTablesPointWriter();
+        IWriter<Point> pointWriter = new NetworkTablePointWriter(); // new DebugPointWriter();
         if (!pointWriter.open())
         {
             System.err.println("unable to open point writer!");
             System.exit(1);
         }
 
+        IController controller = new NetworkTableController(); // new DefaultController();
+        if (!controller.open())
+        {
+            System.err.println("unable to open controller!");
+            System.exit(1);
+        }
+
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
-        HSVCenterPipeline framePipeline = new HSVCenterPipeline(pointWriter, false);
+        HSVCenterPipeline framePipeline = new HSVCenterPipeline(pointWriter, controller, false);
 
         VisionSystem visionSystem = new VisionSystem(cameraReader, framePipeline);
 

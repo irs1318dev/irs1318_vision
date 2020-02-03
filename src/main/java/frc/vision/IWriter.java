@@ -2,14 +2,8 @@ package frc.vision;
 
 import org.opencv.core.Mat;
 
-public interface IWriter<T>
+public interface IWriter<T> extends IOpenable
 {
-    /**
-     * Opens the IWriter
-     * @return true if the writer was successfully opened
-     */
-    public boolean open();
-    
     /**
      * Write a result
      * @param result to write

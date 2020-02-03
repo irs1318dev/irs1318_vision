@@ -60,6 +60,7 @@ public class CameraReader implements Runnable, IFrameReader
      * Opens the camera reader
      * @return true if we were able to open the camera reader
      */
+    @Override
     public boolean open()
     {
         this.vc = new VideoCapture();

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.*;
 
+import frc.vision.controller.DefaultController;
 import frc.vision.pipeline.HSVCenterPipeline;
 
 public class HSVCenterPipelineTest
@@ -45,7 +46,7 @@ public class HSVCenterPipelineTest
             Mat mat = Imgcodecs.imread(HSVCenterPipelineTest.RepoPath + imagePath);
             doReturn(mat).when(frameReader).getCurrentFrame();
 
-            HSVCenterPipeline pipeline = new HSVCenterPipeline(pointWriter, false);
+            HSVCenterPipeline pipeline = new HSVCenterPipeline(pointWriter, new DefaultController(), false);
 
             VisionSystem vs = new VisionSystem(frameReader, pipeline);
             canCaptureAndProcess = vs.captureAndProcess();
