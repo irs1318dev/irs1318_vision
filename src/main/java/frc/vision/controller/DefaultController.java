@@ -7,7 +7,7 @@ public class DefaultController implements IController
     @Override
     public boolean open()
     {
-        return false;
+        return true;
     }
 
     @Override

@@ -4,7 +4,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
-import frc.vision.controller.NetworkTableController;
+import frc.vision.controller.*;
 import frc.vision.pipeline.*;
 import frc.vision.reader.*;
 import frc.vision.writer.*;
