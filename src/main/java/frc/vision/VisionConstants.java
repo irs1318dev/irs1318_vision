@@ -40,7 +40,7 @@ public class VisionConstants
     public static final int LIFECAM_CAMERA_FPS = 30; // Max supported value is 30
 
     // HSV Filtering constants
-    public static final Scalar HSV_FILTER_LOW = new Scalar(70, 150, 150); 
+    public static final Scalar HSV_FILTER_LOW = new Scalar(70, 150, 100); 
     public static final Scalar HSV_FILTER_HIGH = new Scalar(90, 255, 255);
 
     // Contour filtering constants
