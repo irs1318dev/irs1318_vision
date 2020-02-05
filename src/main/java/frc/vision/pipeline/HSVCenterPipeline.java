@@ -1,5 +1,8 @@
 package frc.vision.pipeline;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -152,6 +155,13 @@ public class HSVCenterPipeline implements IFramePipeline
                     }
                 }
 
+                if (largestContour != null)
+                {
+                    List<MatOfPoint> contours = new ArrayList<MatOfPoint>(1);
+                    contours.add(largestContour);
+                    Imgproc.drawContours(undistortedImage, contours, 0, new Scalar(255, 0, 0), 1);
+                }
+
                 if (VisionConstants.DEBUG_FRAME_STREAM && this.controller.getStreamEnabled())
                 {
                     this.output.outputDebugFrame(undistortedImage);
@@ -161,6 +171,12 @@ public class HSVCenterPipeline implements IFramePipeline
 
         // finally, output that center of mass
         this.output.write(centerOfMass);
+
+        if (largestContour != null)
+        {
+            largestContour.release();
+            largestContour = null;
+        }
 
         undistortedImage.release();
     }
