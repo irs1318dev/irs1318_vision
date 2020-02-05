@@ -20,7 +20,7 @@ public class HSVCenterPipelineTest
 {
     private static final String RepoPath = "src/test/resources/";
 
-    @Test
+    //@Test
     public void testLoadImage()
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
