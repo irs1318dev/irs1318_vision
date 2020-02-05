@@ -17,14 +17,16 @@ public class NetworkTablePointWriter implements IWriter<Point>
     private NetworkTableEntry xEntry;
     private NetworkTableEntry yEntry;
 
-    private CvSource frameWriter;
+    private CvSource rawFrameWriter;
+    private CvSource debugFrameWriter;
 
     public NetworkTablePointWriter()
     {
         this.xEntry = null;
         this.yEntry = null;
 
-        this.frameWriter = null;
+        this.rawFrameWriter = null;
+        this.debugFrameWriter = null;
     }
 
     @Override
@@ -34,9 +36,10 @@ public class NetworkTablePointWriter implements IWriter<Point>
         this.xEntry = table.getEntry("v.x");
         this.yEntry = table.getEntry("v.y");
 
+        this.rawFrameWriter = CameraServer.getInstance().putVideo("RPI-raw", 640, 360);
         if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_STREAM)
         {
-            this.frameWriter = CameraServer.getInstance().putVideo("RPI-debug", VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
+            this.debugFrameWriter = CameraServer.getInstance().putVideo("RPI-debug", 640, 360);
         }
 
         return true;
@@ -70,12 +73,18 @@ public class NetworkTablePointWriter implements IWriter<Point>
     }
 
     @Override
-    public void outputFrame(Mat frame)
+    public void outputRawFrame(Mat frame)
+    {
+        this.rawFrameWriter.putFrame(frame);
+    }
+
+    @Override
+    public void outputDebugFrame(Mat frame)
     {
         if (VisionConstants.DEBUG &&
             VisionConstants.DEBUG_FRAME_STREAM)
         {
-            this.frameWriter.putFrame(frame);
+            this.debugFrameWriter.putFrame(frame);
         }
     }
 }

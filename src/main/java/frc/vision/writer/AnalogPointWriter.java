@@ -105,7 +105,12 @@ public class AnalogPointWriter implements IWriter<Point>
     }
 
     @Override
-    public void outputFrame(Mat frame)
+    public void outputRawFrame(Mat frame)
+    {
+    }
+
+    @Override
+    public void outputDebugFrame(Mat frame)
     {
     }
 }

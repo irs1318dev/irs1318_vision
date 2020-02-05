@@ -11,8 +11,14 @@ public interface IWriter<T> extends IOpenable
     public void write(T result);
 
     /**
-     * Output a camera frame
+     * Output a raw camera frame
      * @param frame to output
      */
-    public void outputFrame(Mat frame);
+    public void outputRawFrame(Mat frame);
+
+    /**
+     * Output a debug camera frame
+     * @param frame to output
+     */
+    public void outputDebugFrame(Mat frame);
 }
