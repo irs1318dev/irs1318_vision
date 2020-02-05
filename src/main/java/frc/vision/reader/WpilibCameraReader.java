@@ -77,7 +77,8 @@ public class WpilibCameraReader implements Runnable, IFrameReader
         }
         else
         {
-            UsbCamera usbCamera = CameraServer.getInstance().startAutomaticCapture(VisionConstants.CAMERA_NAME, this.usbId);
+            UsbCamera usbCamera = new UsbCamera(VisionConstants.CAMERA_NAME, this.usbId);
+            CameraServer.getInstance().addCamera(usbCamera);
 
             usbCamera.setResolution(VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
             usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE);
@@ -127,7 +128,7 @@ public class WpilibCameraReader implements Runnable, IFrameReader
     }
 
     /**
-     * Retrieve the most recent image frame from the MJPEG IP Camera
+     * Retrieve the most recent image frame saved from the Camera
      * @return frame of an image
      * @throws InterruptedException
      */

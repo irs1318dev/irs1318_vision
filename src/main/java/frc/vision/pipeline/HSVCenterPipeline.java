@@ -58,7 +58,10 @@ public class HSVCenterPipeline implements IFramePipeline
     @Override
     public void process(Mat image)
     {
-        this.output.outputRawFrame(image);
+        if (this.controller.getStreamEnabled())
+        {
+            this.output.outputRawFrame(image);
+        }
 
         if (!this.controller.getProcessingEnabled())
         {
@@ -86,7 +89,7 @@ public class HSVCenterPipeline implements IFramePipeline
         }
         else
         {
-            undistortedImage = image;
+            undistortedImage = image.clone();
         }
 
         // second, filter HSV
@@ -135,12 +138,13 @@ public class HSVCenterPipeline implements IFramePipeline
                 }
             }
 
-            if ((VisionConstants.DEBUG_FRAME_OUTPUT || VisionConstants.DEBUG_FRAME_STREAM))
+            if (VisionConstants.DEBUG_FRAME_OUTPUT || VisionConstants.DEBUG_FRAME_STREAM)
             {
                 if (centerOfMass != null)
                 {
-                    Imgproc.circle(undistortedImage, centerOfMass, 2, new Scalar(0, 0, 255), -1);
-                    if (VisionConstants.DEBUG_FRAME_OUTPUT)
+                    Imgproc.circle(undistortedImage, centerOfMass, 5, new Scalar(0, 0, 255), Imgproc.FILLED);
+                    if (VisionConstants.DEBUG_FRAME_OUTPUT &&
+                        this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
                     {
                         Imgcodecs.imwrite(
                             String.format("%simage%d-3.redrawn.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
@@ -148,7 +152,7 @@ public class HSVCenterPipeline implements IFramePipeline
                     }
                 }
 
-                if (VisionConstants.DEBUG_FRAME_STREAM)
+                if (VisionConstants.DEBUG_FRAME_STREAM && this.controller.getStreamEnabled())
                 {
                     this.output.outputDebugFrame(undistortedImage);
                 }

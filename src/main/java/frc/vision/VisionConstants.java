@@ -16,6 +16,9 @@ public class VisionConstants
     // Default camera settings:
     public static final int DEFAULT_SETTING = 0;
     public static final String CAMERA_NAME = "RPI-raw";
+    public static final String DEBUG_STREAM_NAME = "RPI-debug";
+    public static final int STREAM_RESOLUTION_X = 640;
+    public static final int STREAM_RESOLUTION_Y = 360;
 
     // Debug output settings:
     public static final boolean DEBUG = true;
