@@ -25,13 +25,13 @@ public class HSVCenterPipelineTest
     {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        this.testImagePath("Capture1.PNG", 226.91574279379157, 68.74648928307464);
-        this.testImagePath("Capture2.PNG", 166.15738498789347, 68.18079096045197);
-        this.testImagePath("Capture3.PNG", 155.24096385542168, 79.27242302543507);
-        this.testImagePath("Capture4.PNG", 236.04901960784312, 22.840874811463046);
-        this.testImagePath("Capture5.PNG", 103.25178147268409, 23.347585114806016);
-        this.testImagePath("Capture6.PNG", 254.66052541794608, 107.45513476629135);
-        this.testImagePath("Capture7.PNG", 41.672469374597036, 52.068772834730275);
+        this.testImagePath("Capture1.PNG", 226.51737451737452, 68.58751608751608);
+        this.testImagePath("Capture2.PNG", 166.3274074074074, 67.59629629629629);
+        this.testImagePath("Capture3.PNG", 155.2574139976275, 79.27995255041517);
+        this.testImagePath("Capture4.PNG", 180.40930869267623, 23.529089664613277);
+        this.testImagePath("Capture5.PNG", 158.16500332667997, 22.772455089820358);
+        this.testImagePath("Capture6.PNG", 254.771847690387, 107.28870162297129);
+        this.testImagePath("Capture7.PNG", 41.716626698641086, 52.47881694644284);
     }
 
     private void testImagePath(String imagePath, double x, double y)
@@ -52,7 +52,8 @@ public class HSVCenterPipelineTest
             canCaptureAndProcess = vs.captureAndProcess();
 
             verify(pointWriter).write(eq(new Point(x, y)));
-            //verify(pointWriter).outputFrame(anyObject());
+            verify(pointWriter).outputRawFrame(anyObject());
+            verify(pointWriter).outputDebugFrame(anyObject());
             verify(frameReader).getCurrentFrame();
 
             verifyNoMoreInteractions(pointWriter);
