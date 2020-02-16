@@ -124,7 +124,6 @@ public class HSVCenterPipeline implements IFramePipeline
         if (largestContour != null)
         {
             centerOfMass = ContourHelper.findCenterOfMass(largestContour);
-            largestContour.release();
         }
 
         if (VisionConstants.DEBUG)
@@ -156,12 +155,12 @@ public class HSVCenterPipeline implements IFramePipeline
                     }
                 }
 
-/*                if (largestContour != null)
+                if (largestContour != null)
                 {
                     List<MatOfPoint> contours = new ArrayList<MatOfPoint>(1);
                     contours.add(largestContour);
                     Imgproc.drawContours(undistortedImage, contours, 0, new Scalar(255, 0, 0), 1);
-                }*/
+                }
 
                 if (VisionConstants.DEBUG_FRAME_STREAM && this.controller.getStreamEnabled())
                 {
