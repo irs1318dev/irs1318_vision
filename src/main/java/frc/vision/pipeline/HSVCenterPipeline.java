@@ -1,5 +1,7 @@
 package frc.vision.pipeline;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class HSVCenterPipeline implements IFramePipeline
 {
     private final IWriter<Point> output;
     private final IController controller;
+    private final File imageLoggingDirectory;
 
     private final ImageUndistorter undistorter;
     private final HSVFilter hsvFilter;
@@ -32,14 +35,17 @@ public class HSVCenterPipeline implements IFramePipeline
      * @param output point writer
      * @param controller to check for pieces being enabled
      * @param shouldUndistort whether to undistor the image or not
+     * @param imageLoggingDirectory to log images to
      */
     public HSVCenterPipeline(
         IWriter<Point> output,
         IController controller,
-        boolean shouldUndistort)
+        boolean shouldUndistort,
+        File imageLoggingDirectory)
     {
         this.output = output;
         this.controller = controller;
+        this.imageLoggingDirectory = imageLoggingDirectory;
 
         if (shouldUndistort)
         {
@@ -73,6 +79,13 @@ public class HSVCenterPipeline implements IFramePipeline
         }
 
         this.count++;
+        if (this.imageLoggingDirectory != null && this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
+        {
+            File newFile = new File(this.imageLoggingDirectory, String.format("image%d.jpg", this.count));
+            newFile.delete();
+
+            Imgcodecs.imwrite(newFile.getAbsolutePath(), image);
+        }
 
         // first, undistort the image.
         // Also save the undistorted image for possible output later...
@@ -82,7 +95,7 @@ public class HSVCenterPipeline implements IFramePipeline
             image = this.undistorter.undistortFrame(image);
             if (VisionConstants.DEBUG &&
                 VisionConstants.DEBUG_FRAME_OUTPUT &&
-                this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
+                this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
             {
                 Imgcodecs.imwrite(
                     String.format("%simage%d-1.undistorted.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
@@ -100,7 +113,7 @@ public class HSVCenterPipeline implements IFramePipeline
         image = this.hsvFilter.filterHSV(image);
         if (VisionConstants.DEBUG &&
             VisionConstants.DEBUG_FRAME_OUTPUT &&
-            this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
+            this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
         {
             Imgcodecs.imwrite(
                 String.format("%simage%d-2.hsvfiltered.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
@@ -147,7 +160,7 @@ public class HSVCenterPipeline implements IFramePipeline
                 {
                     Imgproc.circle(undistortedImage, centerOfMass, 5, new Scalar(0, 0, 255), Imgproc.FILLED);
                     if (VisionConstants.DEBUG_FRAME_OUTPUT &&
-                        this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
+                        this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
                     {
                         Imgcodecs.imwrite(
                             String.format("%simage%d-3.redrawn.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),

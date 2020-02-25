@@ -1,5 +1,8 @@
 package frc.vision;
 
+import java.io.File;
+import java.util.List;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -8,6 +11,8 @@ import frc.vision.controller.*;
 import frc.vision.pipeline.*;
 import frc.vision.reader.*;
 import frc.vision.writer.*;
+import net.samuelcampos.usbdrivedetector.USBDeviceDetectorManager;
+import net.samuelcampos.usbdrivedetector.USBStorageDevice;
 
 public class VisionSystem implements Runnable
 {
@@ -137,10 +142,33 @@ public class VisionSystem implements Runnable
             System.exit(1);
         }
 
+        // scan through the list of USB devices until we find one to log images to
+        File imageLoggingDirectory = null;
+        USBDeviceDetectorManager driveDetector = new USBDeviceDetectorManager();
+        List<USBStorageDevice> devices = driveDetector.getRemovableDevices();
+        if (devices != null && devices.size() > 0)
+        {
+            for (USBStorageDevice device : devices)
+            {
+                if (device.canWrite())
+                {
+                    File deviceRootDirectory = device.getRootDirectory();
+                    if (deviceRootDirectory.isDirectory() && deviceRootDirectory.getFreeSpace() > 1L)
+                    {
+                        File imagesSubdirectory = new File(deviceRootDirectory, "rpi-images");
+                        imagesSubdirectory.mkdir();
+
+                        imageLoggingDirectory = imagesSubdirectory;
+                        break;
+                    }
+                }
+            }
+        }
+
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
-        HSVCenterPipeline framePipeline = new HSVCenterPipeline(pointWriter, controller, false);
+        HSVCenterPipeline framePipeline = new HSVCenterPipeline(pointWriter, controller, false, imageLoggingDirectory);
 
         VisionSystem visionSystem = new VisionSystem(cameraReader, framePipeline);
 

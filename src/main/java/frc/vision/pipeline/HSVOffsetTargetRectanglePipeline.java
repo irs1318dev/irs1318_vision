@@ -1,5 +1,6 @@
 package frc.vision.pipeline;
 
+import java.io.File;
 import java.util.List;
 
 import org.opencv.core.Mat;
@@ -27,6 +28,7 @@ public class HSVOffsetTargetRectanglePipeline implements IFramePipeline
 
     private final IWriter<OffsetMeasurements> output;
     private final IController controller;
+    private final File imageLoggingDirectory;
 
     private final ImageUndistorter undistorter;
     private final HSVFilter hsvFilter;
@@ -37,11 +39,13 @@ public class HSVOffsetTargetRectanglePipeline implements IFramePipeline
      * @param output point writer
      * @param controller to check for pieces being enabled
      * @param shouldUndistort whether to undistor the image or not
+     * @param imageLoggingDirectory to log images to
      */
     public HSVOffsetTargetRectanglePipeline(
         IWriter<OffsetMeasurements> output,
         IController controller,
-        boolean shouldUndistort)
+        boolean shouldUndistort,
+        File imageLoggingDirectory)
     {
         this.offsetCalculator = new OffsetVisionCalculator(
             VisionConstants.LIFECAM_CAMERA_RESOLUTION_X,
@@ -57,6 +61,7 @@ public class HSVOffsetTargetRectanglePipeline implements IFramePipeline
 
         this.output = output;
         this.controller = controller;
+        this.imageLoggingDirectory = imageLoggingDirectory;
 
         if (shouldUndistort)
         {
@@ -84,6 +89,13 @@ public class HSVOffsetTargetRectanglePipeline implements IFramePipeline
         }
 
         this.count++;
+        if (this.imageLoggingDirectory != null && this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
+        {
+            File newFile = new File(this.imageLoggingDirectory, String.format("image%d.jpg", this.count));
+            newFile.delete();
+
+            Imgcodecs.imwrite(newFile.getAbsolutePath(), image);
+        }
 
         // first, undistort the image.
         // Also save the undistorted image for possible output later...
@@ -93,7 +105,7 @@ public class HSVOffsetTargetRectanglePipeline implements IFramePipeline
             image = this.undistorter.undistortFrame(image);
             if (VisionConstants.DEBUG &&
                 VisionConstants.DEBUG_FRAME_OUTPUT &&
-                this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
+                this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
             {
                 Imgcodecs.imwrite(
                     String.format("%simage%d-1.undistorted.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
@@ -111,7 +123,7 @@ public class HSVOffsetTargetRectanglePipeline implements IFramePipeline
         image = this.hsvFilter.filterHSV(image);
         if (VisionConstants.DEBUG &&
             VisionConstants.DEBUG_FRAME_OUTPUT &&
-            this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
+            this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
         {
             Imgcodecs.imwrite(
                 String.format("%simage%d-2.hsvfiltered.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
@@ -163,7 +175,7 @@ public class HSVOffsetTargetRectanglePipeline implements IFramePipeline
 
             if (center != null &&
                 VisionConstants.DEBUG_FRAME_OUTPUT &&
-                this.count % VisionConstants.DEBUG_FRAME_OUTPUT_GAP == 0)
+                this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
             {
                 Imgproc.circle(undistortedImage, center, 2, new Scalar(0, 0, 255), -1);
                 Imgcodecs.imwrite(

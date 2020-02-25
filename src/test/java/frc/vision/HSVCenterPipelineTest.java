@@ -46,7 +46,7 @@ public class HSVCenterPipelineTest
             Mat mat = Imgcodecs.imread(HSVCenterPipelineTest.RepoPath + imagePath);
             doReturn(mat).when(frameReader).getCurrentFrame();
 
-            HSVCenterPipeline pipeline = new HSVCenterPipeline(pointWriter, new DefaultController(), false);
+            HSVCenterPipeline pipeline = new HSVCenterPipeline(pointWriter, new DefaultController(), false, null);
 
             VisionSystem vs = new VisionSystem(frameReader, pipeline);
             canCaptureAndProcess = vs.captureAndProcess();
