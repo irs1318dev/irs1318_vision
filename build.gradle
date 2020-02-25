@@ -40,7 +40,9 @@ dependencies
     compile "edu.wpi.first.cscore:cscore-jni:2020.3.2:" + platform
     compile "edu.wpi.first.cameraserver:cameraserver-java:2020.3.2"
     compile "net.samuelcampos:usbdrivedetector:2.1.1"
-
+    compile "com.github.tuupertunut:powershell-lib-java:2.0.0"
+    compile "org.projectlombok:lombok:1.18.10"
+    compile "org.slf4j:slf4j-api:1.7.28"
     compile files(opencvJar)
 
     testCompile "org.mockito:mockito-all:1.10.19"
