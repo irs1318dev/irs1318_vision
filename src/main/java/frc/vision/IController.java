@@ -13,4 +13,10 @@ public interface IController extends IOpenable
      * @return true if enabled
      */
     public boolean getProcessingEnabled();
+
+    /**
+     * Gets the match that the robot is playing
+     * @return match if known, or null
+     */
+    public String getRobotMatch();
 }

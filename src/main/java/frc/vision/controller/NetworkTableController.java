@@ -11,6 +11,7 @@ public class NetworkTableController implements IController
 {
     private NetworkTableEntry streamEnabledEntry;
     private NetworkTableEntry processingEnabledEntry;
+    private NetworkTableEntry robotMatchEntry;
 
     public NetworkTableController()
     {
@@ -22,6 +23,7 @@ public class NetworkTableController implements IController
         NetworkTable table = NetworkTableHelper.getSmartDashboard();
         this.streamEnabledEntry = table.getEntry("rpi.enableStream");
         this.processingEnabledEntry = table.getEntry("rpi.enableProcessing");
+        this.robotMatchEntry = table.getEntry("r.match");
         return true;
     }
 
@@ -35,6 +37,26 @@ public class NetworkTableController implements IController
     public boolean getProcessingEnabled()
     {
         return NetworkTableController.getBooleanValueIfAssigned(this.processingEnabledEntry);
+    }
+
+    @Override
+    public String getRobotMatch()
+    {
+        return NetworkTableController.getStringalueIfAssigned(this.robotMatchEntry);
+    }
+
+    private static String getStringalueIfAssigned(NetworkTableEntry entry)
+    {
+        if (entry != null)
+        {
+            NetworkTableValue value = entry.getValue();
+            if (value.getType() == NetworkTableType.kString)
+            {
+                return value.getString();
+            }
+        }
+
+        return null;
     }
 
     private static boolean getBooleanValueIfAssigned(NetworkTableEntry entry)

@@ -81,7 +81,17 @@ public class HSVCenterPipeline implements IFramePipeline
         this.count++;
         if (this.imageLoggingDirectory != null && this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
         {
-            File newFile = new File(this.imageLoggingDirectory, String.format("image%d.jpg", this.count));
+            String robotMatch = this.controller.getRobotMatch();
+            if (robotMatch != null)
+            {
+                robotMatch += " ";
+            }
+            else
+            {
+                robotMatch = "";
+            }
+
+            File newFile = new File(this.imageLoggingDirectory, String.format("%simage%d.jpg", robotMatch, this.count));
             newFile.delete();
 
             Imgcodecs.imwrite(newFile.getAbsolutePath(), image);

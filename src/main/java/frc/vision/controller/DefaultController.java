@@ -21,4 +21,10 @@ public class DefaultController implements IController
     {
         return true;
     }
+
+    @Override
+    public String getRobotMatch()
+    {
+        return null;
+    }
 }
