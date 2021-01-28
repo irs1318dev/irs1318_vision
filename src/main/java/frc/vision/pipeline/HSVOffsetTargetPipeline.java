@@ -80,7 +80,7 @@ public class HSVOffsetTargetPipeline implements IFramePipeline
     @Override
     public void process(Mat image)
     {
-        if (!this.controller.getProcessingEnabled())
+        if (this.controller.getProcessingEnabled() == 0)
         {
             return;
         }

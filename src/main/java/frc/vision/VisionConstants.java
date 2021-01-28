@@ -37,8 +37,11 @@ public class VisionConstants
     public static final double LIFECAM_CAMERA_FIELD_OF_VIEW_Y = 36.91875; // 16:9 field of view along y axis
     public static final double LIFECAM_CAMERA_FOCAL_LENGTH_X = 1078.4675; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
     public static final double LIFECAM_CAMERA_FOCAL_LENGTH_Y = 1078.4675; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
-    public static final int LIFECAM_CAMERA_VISION_EXPOSURE = 1;
-    public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS = 1;
+    public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS_REFLECTIVE = 1;
+    public static final int LIFECAM_CAMERA_VISION_EXPOSURE_REFLECTIVE = 1;
+    public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS_POWERCELL = 20;
+    public static final int LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL = 20;
+
     public static final int LIFECAM_CAMERA_OPERATOR_BRIGHTNESS = 35;
     public static final int LIFECAM_CAMERA_FPS = 30; // Max supported value is 30
 

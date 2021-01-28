@@ -16,6 +16,9 @@ public class NetworkTablePointWriter implements IWriter<Point>
 {
     private NetworkTableEntry xEntry;
     private NetworkTableEntry yEntry;
+    
+    private NetworkTableEntry widthEntry;
+    private NetworkTableEntry heightEntry;
 
     private CvSource rawFrameWriter;
     private CvSource debugFrameWriter;
@@ -24,6 +27,9 @@ public class NetworkTablePointWriter implements IWriter<Point>
     {
         this.xEntry = null;
         this.yEntry = null;
+
+        this.widthEntry = null;
+        this.heightEntry = null;
 
         this.rawFrameWriter = null;
         this.debugFrameWriter = null;
@@ -36,6 +42,9 @@ public class NetworkTablePointWriter implements IWriter<Point>
         this.xEntry = table.getEntry("v.x");
         this.yEntry = table.getEntry("v.y");
 
+        this.widthEntry = table.getEntry("v.width");
+        this.heightEntry = table.getEntry("v.height");
+
         this.rawFrameWriter = CameraServer.getInstance().putVideo(VisionConstants.CAMERA_NAME, VisionConstants.STREAM_RESOLUTION_X, VisionConstants.STREAM_RESOLUTION_Y);
         if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_STREAM)
         {
@@ -46,7 +55,7 @@ public class NetworkTablePointWriter implements IWriter<Point>
     }
 
     @Override
-    public void write(Point point)
+    public void write(Point point) // pass in a point = point.center
     {
         if (point == null)
         {
@@ -68,6 +77,33 @@ public class NetworkTablePointWriter implements IWriter<Point>
             else
             {
                 System.out.println("Point not found");
+            }
+        }
+    }
+
+    @Override
+    public void write(Size size) // pass in a point = rotatedRect.size
+    {
+        if (size == null)
+        {
+            this.widthEntry.setDouble(-1318.0);
+            this.heightEntry.setDouble(-1318.0);
+        }
+        else
+        {
+            this.widthEntry.setDouble(size.width);
+            this.heightEntry.setDouble(size.height);
+        }
+
+        if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT)
+        {
+            if (size != null)
+            {
+                System.out.println(String.format("Size: %f, %f", size.width, size.height));
+            }
+            else
+            {
+                System.out.println("Size not found");
             }
         }
     }

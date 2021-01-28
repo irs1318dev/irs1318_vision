@@ -309,6 +309,10 @@ public class ContourHelper
         {
             return null;
         }
+        // mama oooooooooooo didn't mean to make you cry but somehow I manage to do it everytime carry onnnn carry on
+        // with your cup of tears 
+        // mamaaaaa oooooo I love my mommy and I think she should love herself tooooo
+        //carry onnnnn carry onnnn I really like my mommy
 
         return new Point(moments.get_m10() / moments.get_m00(), moments.get_m01() / moments.get_m00());
     }

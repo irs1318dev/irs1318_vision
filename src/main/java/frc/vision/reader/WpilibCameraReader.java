@@ -12,6 +12,8 @@ import frc.vision.VisionConstants;
 
 public class WpilibCameraReader implements Runnable, IFrameReader
 {
+    private final IController controller;
+
     private final String videoUrl;
     private final int usbId;
 
@@ -24,6 +26,8 @@ public class WpilibCameraReader implements Runnable, IFrameReader
     private boolean stop;
 
     private boolean opened;
+
+    private int cameraMode;
 
     /**
      * Initializes a new instance of the WpilibCameraReader class.
@@ -42,6 +46,8 @@ public class WpilibCameraReader implements Runnable, IFrameReader
         this.opened = false;
         this.camera = null;
         this.cvSink = null;
+
+        this.cameraMode = 0;
     }
 
     /**
@@ -60,6 +66,8 @@ public class WpilibCameraReader implements Runnable, IFrameReader
 
         this.opened = false;
         this.camera = null;
+
+        this.cameraMode = 0;
     }
 
     /**
@@ -80,9 +88,20 @@ public class WpilibCameraReader implements Runnable, IFrameReader
             UsbCamera usbCamera = new UsbCamera(VisionConstants.CAMERA_NAME, this.usbId);
             CameraServer.getInstance().addCamera(usbCamera);
 
+            this.cameraMode = this.controller.getProcessingEnabled();
+
+            if (this.cameraMode == 1)
+            {
+                usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_REFLECTIVE);
+                usbCamera.setBrightness(VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS_REFLECTIVE);
+            }
+            else 
+            {
+                usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL);
+                usbCamera.setBrightness(VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS_POWERCELL);
+            }
+
             usbCamera.setResolution(VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
-            usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE);
-            usbCamera.setBrightness(VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS);
             usbCamera.setFPS(VisionConstants.LIFECAM_CAMERA_FPS);
 
             this.camera = usbCamera;

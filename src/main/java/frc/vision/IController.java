@@ -10,7 +10,7 @@ public interface IController extends IOpenable
 
     /**
      * Gets whether processing is enabled
-     * @return true if enabled
+     * @return 0 if no processing is enabled, 1 if vision target is enabled, 2 if power cell is enabled 
      */
-    public boolean getProcessingEnabled();
+    public int getProcessingEnabled();
 }

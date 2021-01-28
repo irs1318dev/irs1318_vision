@@ -37,7 +37,7 @@ public class HSVCenterPipeline implements IFramePipeline
      * @param shouldUndistort whether to undistor the image or not
      * @param imageLoggingDirectory to log images to
      */
-    public HSVCenterPipeline( //mommy
+    public HSVCenterPipeline( // mommy
         IWriter<Point> output, // mommy
         IController controller, // mommy
         boolean shouldUndistort, // mommy
@@ -45,7 +45,7 @@ public class HSVCenterPipeline implements IFramePipeline
     {
         this.output = output; // mommy
         this.controller = controller; // mommy
-        this.imageLoggingDirectory = imageLoggingDirectory; //m 
+        this.imageLoggingDirectory = imageLoggingDirectory; // mommy
 
         if (shouldUndistort)
         {
@@ -133,10 +133,18 @@ public class HSVCenterPipeline implements IFramePipeline
         }
 
         // fourth, find the center of mass for the largest contour
-        Point centerOfMass = null;
+
+        RotatedRect largestRectangle = null;
         if (largestContour != null)
         {
-            centerOfMass = ContourHelper.findCenterOfMass(largestContour);
+            MatOfPoint2f newMop2f = new MatOfPoint2f();
+            largestContour.convertTo(newMop2f, CvType.CV_32FC2);
+            largestRectangle = Imgproc.minAreaRect(newMop2f);
+            largestContour.release();
+        }
+        else
+        {
+            largestRectangle = null;
         }
 
         if (VisionConstants.DEBUG)
@@ -144,21 +152,21 @@ public class HSVCenterPipeline implements IFramePipeline
             if (VisionConstants.DEBUG_PRINT_OUTPUT &&
                 VisionConstants.DEBUG_PRINT_PIPELINE_DATA)
             {
-                if (centerOfMass == null)
+                if (largestRectangle == null)
                 {
-                    System.out.println("couldn't find the center of mass!");
+                    System.out.println("couldn't find the largest rectangle!");
                 }
                 else
                 {
-                    System.out.println(String.format("Center of mass: %f, %f", centerOfMass.x, centerOfMass.y));
+                    System.out.println(String.format("Center of rectangle: %f, %f", largestRectangle.center.x, largestRectangle.center.y));
                 }
             }
 
             if (VisionConstants.DEBUG_FRAME_OUTPUT || VisionConstants.DEBUG_FRAME_STREAM)
             {
-                if (centerOfMass != null)
+                if (largestRectangle != null)
                 {
-                    Imgproc.circle(undistortedImage, centerOfMass, 5, new Scalar(0, 0, 255), Imgproc.FILLED);
+                    Imgproc.circle(undistortedImage, largestRectangle.center, 5, new Scalar(0, 0, 255), Imgproc.FILLED);
                     if (VisionConstants.DEBUG_FRAME_OUTPUT &&
                         this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
                     {
@@ -168,11 +176,9 @@ public class HSVCenterPipeline implements IFramePipeline
                     }
                 }
 
-                if (largestContour != null)
+                if (largestRectangle != null)
                 {
-                    List<MatOfPoint> contours = new ArrayList<MatOfPoint>(1);
-                    contours.add(largestContour);
-                    Imgproc.drawContours(undistortedImage, contours, 0, new Scalar(255, 0, 0), 1);
+                    Imgproc.rectangle(undistortedImage, contours, 0, new Scalar(255, 0, 0), 1);
                 }
 
                 if (VisionConstants.DEBUG_FRAME_STREAM && this.controller.getStreamEnabled())

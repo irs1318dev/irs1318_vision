@@ -32,9 +32,23 @@ public class NetworkTableController implements IController
     }
 
     @Override
-    public boolean getProcessingEnabled()
+    public int getProcessingEnabled() 
     {
-        return NetworkTableController.getBooleanValueIfAssigned(this.processingEnabledEntry);
+        return NetworkTableController.getIntValueIfAssigned(this.processingEnabledEntry);
+    }
+
+
+    private static int getIntValueIfAssigned(NetworkTableEntry entry) // might be wrong pls help
+    {
+        if (entry != null)
+        {
+            NetworkTableValue value = entry.getValue();
+            if (value.getType() == NetworkTableType.kInt)
+            {
+                return value.getInt();
+            }
+        }
+        return 0;
     }
 
     private static boolean getBooleanValueIfAssigned(NetworkTableEntry entry)
