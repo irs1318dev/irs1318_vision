@@ -20,7 +20,7 @@ import frc.vision.helpers.ContourHelper;
 import frc.vision.helpers.HSVFilter;
 import frc.vision.helpers.ImageUndistorter;
 
-public class HSVCenterPipeline implements IFramePipeline
+public class HSVCenterPipelinePowercell implements IFramePipeline
 {
     private final IWriter<Point> output;
     private final IController controller;
@@ -37,15 +37,15 @@ public class HSVCenterPipeline implements IFramePipeline
      * @param shouldUndistort whether to undistor the image or not
      * @param imageLoggingDirectory to log images to
      */
-    public HSVCenterPipeline( // mommy
-        IWriter<Point> output, // mommy
-        IController controller, // mommy
-        boolean shouldUndistort, // mommy
-        File imageLoggingDirectory) // mommy
+    public HSVCenterPipelinePowercell( 
+        IWriter<Point> output,
+        IController controller,
+        boolean shouldUndistort, 
+        File imageLoggingDirectory)
     {
-        this.output = output; // mommy
-        this.controller = controller; // mommy
-        this.imageLoggingDirectory = imageLoggingDirectory; // mommy
+        this.output = output; 
+        this.controller = controller;
+        this.imageLoggingDirectory = imageLoggingDirectory; 
 
         if (shouldUndistort)
         {
@@ -178,7 +178,10 @@ public class HSVCenterPipeline implements IFramePipeline
 
                 if (largestRectangle != null)
                 {
-                    Imgproc.rectangle(undistortedImage, contours, 0, new Scalar(255, 0, 0), 1);
+                    Imgproc.rectangle(undistortedImage, 
+                    new Point(largestRectangle.center.x - (largestRectangle.size.length/2), largestRectangle.center.y - (largestRectangle.size.width/2)), 
+                    new Point(largestRectangle.center.x + (largestRectangle.size.length/2), largestRectangle.center.y + (largestRectangle.size.width/2)), 
+                    new Scalar(255, 0, 0), 2);
                 }
 
                 if (VisionConstants.DEBUG_FRAME_STREAM && this.controller.getStreamEnabled())
@@ -189,7 +192,8 @@ public class HSVCenterPipeline implements IFramePipeline
         }
 
         // finally, output that center of mass
-        this.output.write(centerOfMass);
+        this.output.write(largestRectangle.center);
+        this.output.write(largestRectangle.size);
 
         if (largestContour != null)
         {

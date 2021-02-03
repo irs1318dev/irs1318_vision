@@ -17,17 +17,18 @@ import net.samuelcampos.usbdrivedetector.USBStorageDevice;
 public class VisionSystem implements Runnable
 {
     private IFrameReader frameReader;
-    private IFramePipeline framePipeline;
+    private IFramePipeline framePipeline;    
 
     /**
      * Initializes a new instance of the VisionSystem class.
      * @param frameReader that reads frames from some source
      * @param framePipeline that processs frames from some source
      */
-    public VisionSystem(IFrameReader frameReader, IFramePipeline framePipeline)
+    public VisionSystem(IFrameReader frameReader, IFramePipeline framePipeline, IController controller)
     {
         this.frameReader = frameReader;
         this.framePipeline = framePipeline;
+        this.controller = controller;
     }
 
     /**
@@ -165,12 +166,24 @@ public class VisionSystem implements Runnable
             }
         }
 
+
         Thread cameraThread = new Thread(cameraReader);
         cameraThread.start();
 
-        HSVCenterPipeline framePipeline = new HSVCenterPipeline(pointWriter, controller, false, imageLoggingDirectory);
+        HSVCenterPipeline framePipeline;
+        HSVCenterPipelinePowercell framePipelinePowercell;
+        VisionSystem visionSystem;
 
-        VisionSystem visionSystem = new VisionSystem(cameraReader, framePipeline);
+        if(controller.getProcessingEnabled == 1)
+        {
+            framePipeline = new HSVCenterPipeline(pointWriter, controller, false, imageLoggingDirectory);
+            visionSystem = new VisionSystem(cameraReader, framePipeline);
+        }
+        else if(controller.getProcessingEnabled == 2)
+        {
+            framePipelinePowercell = new HSVCenterPipelinePowercell(pointWriter, controller, false, imageLoggingDirectory);
+            visionSystem = new VisionSystem(cameraReader, framePipeline);
+        }
 
         Thread visionThread = new Thread(visionSystem);
         visionThread.run();
