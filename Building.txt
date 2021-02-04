@@ -2,6 +2,10 @@ Before you can build, you must first set a couple environment variables based on
 1. Named OPENCV_JAR which is the absolute path to the opencv_410.jar file.
 2. Named OPENCV_LIB which is the absolute path of the directory where the corresponding opencv_410 library is located.
 
+To download OpenCV releases:
+https://github.com/opencv/opencv/releases
+https://medium.com/macoclock/setting-up-mac-for-opencv-java-development-with-intellij-idea-fd2153eb634f 
+
 For me, this is:
 Windows:	C:\opencv\build\java\opencv-410.jar and C:\opencv\build\java\x64\
 RPI:		/usr/local/share/OpenCV/java/opencv-410.jar and /usr/local/share/OpenCV/java/

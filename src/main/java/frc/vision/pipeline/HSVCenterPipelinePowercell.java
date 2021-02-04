@@ -20,8 +20,7 @@ import frc.vision.helpers.ContourHelper;
 import frc.vision.helpers.HSVFilter;
 import frc.vision.helpers.ImageUndistorter;
 
-public class HSVCenterPipelinePowercell implements IFramePipeline
-{
+public class HSVCenterPipelinePowercell implements IFramePipeline {
     private final IWriter<Point> output;
     private final IController controller;
     private final File imageLoggingDirectory;
@@ -32,27 +31,21 @@ public class HSVCenterPipelinePowercell implements IFramePipeline
 
     /**
      * Initializes a new instance of the HSVCenterPipeline class.
-     * @param output point writer
-     * @param controller to check for pieces being enabled
-     * @param shouldUndistort whether to undistor the image or not
+     * 
+     * @param output                point writer
+     * @param controller            to check for pieces being enabled
+     * @param shouldUndistort       whether to undistor the image or not
      * @param imageLoggingDirectory to log images to
      */
-    public HSVCenterPipelinePowercell( 
-        IWriter<Point> output,
-        IController controller,
-        boolean shouldUndistort, 
-        File imageLoggingDirectory)
-    {
-        this.output = output; 
+    public HSVCenterPipelinePowercell(IWriter<Point> output, IController controller, boolean shouldUndistort,
+            File imageLoggingDirectory) {
+        this.output = output;
         this.controller = controller;
-        this.imageLoggingDirectory = imageLoggingDirectory; 
+        this.imageLoggingDirectory = imageLoggingDirectory;
 
-        if (shouldUndistort)
-        {
+        if (shouldUndistort) {
             this.undistorter = new ImageUndistorter();
-        }
-        else
-        {
+        } else {
             this.undistorter = null;
         }
 
@@ -62,25 +55,22 @@ public class HSVCenterPipelinePowercell implements IFramePipeline
 
     /**
      * Process a single image frame
+     * 
      * @param frame image to process
      */
     @Override
-    public void process(Mat image)
-    {
-        if (this.controller.getStreamEnabled())
-        {
+    public void process(Mat image) {
+        if (this.controller.getStreamEnabled()) {
             this.output.outputRawFrame(image);
         }
 
-        if (this.controller.getProcessingEnabled() == 0)
-        {
+        if (this.controller.getProcessingEnabled() != 2) {
             this.output.write(null);
             return;
         }
 
         this.count++;
-        if (this.imageLoggingDirectory != null && this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
-        {
+        if (this.imageLoggingDirectory != null && this.count % VisionConstants.FRAME_OUTPUT_GAP == 0) {
             File newFile = new File(this.imageLoggingDirectory, String.format("image%d.jpg", this.count));
             newFile.delete();
 
@@ -90,44 +80,34 @@ public class HSVCenterPipelinePowercell implements IFramePipeline
         // first, undistort the image.
         // Also save the undistorted image for possible output later...
         Mat undistortedImage;
-        if (this.undistorter != null)
-        {
+        if (this.undistorter != null) {
             image = this.undistorter.undistortFrame(image);
-            if (VisionConstants.DEBUG &&
-                VisionConstants.DEBUG_FRAME_OUTPUT &&
-                this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
-            {
+            if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_OUTPUT
+                    && this.count % VisionConstants.FRAME_OUTPUT_GAP == 0) {
                 Imgcodecs.imwrite(
-                    String.format("%simage%d-1.undistorted.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
-                    image);
+                        String.format("%simage%d-1.undistorted.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
+                        image);
             }
 
             undistortedImage = image.clone();
-        }
-        else
-        {
+        } else {
             undistortedImage = image.clone();
         }
 
         // second, filter HSV
         image = this.hsvFilter.filterHSV(image);
-        if (VisionConstants.DEBUG &&
-            VisionConstants.DEBUG_FRAME_OUTPUT &&
-            this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
-        {
+        if (VisionConstants.DEBUG && VisionConstants.DEBUG_FRAME_OUTPUT
+                && this.count % VisionConstants.FRAME_OUTPUT_GAP == 0) {
             Imgcodecs.imwrite(
-                String.format("%simage%d-2.hsvfiltered.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
-                image);
+                    String.format("%simage%d-2.hsvfiltered.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
+                    image);
         }
 
         // third, find the largest contour.
         MatOfPoint largestContour = ContourHelper.findLargestContour(image, VisionConstants.CONTOUR_MIN_AREA);
-        if (largestContour == null)
-        {
-            if (VisionConstants.DEBUG &&
-                VisionConstants.DEBUG_PRINT_OUTPUT &&
-                VisionConstants.DEBUG_PRINT_PIPELINE_DATA)
-            {
+        if (largestContour == null) {
+            if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT
+                    && VisionConstants.DEBUG_PRINT_PIPELINE_DATA) {
                 System.out.println("could not find any contour");
             }
         }
@@ -135,57 +115,44 @@ public class HSVCenterPipelinePowercell implements IFramePipeline
         // fourth, find the center of mass for the largest contour
 
         RotatedRect largestRectangle = null;
-        if (largestContour != null)
-        {
+        if (largestContour != null) {
             MatOfPoint2f newMop2f = new MatOfPoint2f();
             largestContour.convertTo(newMop2f, CvType.CV_32FC2);
             largestRectangle = Imgproc.minAreaRect(newMop2f);
             largestContour.release();
-        }
-        else
-        {
+        } else {
             largestRectangle = null;
         }
 
-        if (VisionConstants.DEBUG)
-        {
-            if (VisionConstants.DEBUG_PRINT_OUTPUT &&
-                VisionConstants.DEBUG_PRINT_PIPELINE_DATA)
-            {
-                if (largestRectangle == null)
-                {
+        if (VisionConstants.DEBUG) {
+            if (VisionConstants.DEBUG_PRINT_OUTPUT && VisionConstants.DEBUG_PRINT_PIPELINE_DATA) {
+                if (largestRectangle == null) {
                     System.out.println("couldn't find the largest rectangle!");
-                }
-                else
-                {
-                    System.out.println(String.format("Center of rectangle: %f, %f", largestRectangle.center.x, largestRectangle.center.y));
+                } else {
+                    System.out.println(String.format("Center of rectangle: %f, %f", largestRectangle.center.x,
+                            largestRectangle.center.y));
                 }
             }
 
-            if (VisionConstants.DEBUG_FRAME_OUTPUT || VisionConstants.DEBUG_FRAME_STREAM)
-            {
-                if (largestRectangle != null)
-                {
+            if (VisionConstants.DEBUG_FRAME_OUTPUT || VisionConstants.DEBUG_FRAME_STREAM) {
+                if (largestRectangle != null) {
                     Imgproc.circle(undistortedImage, largestRectangle.center, 5, new Scalar(0, 0, 255), Imgproc.FILLED);
-                    if (VisionConstants.DEBUG_FRAME_OUTPUT &&
-                        this.count % VisionConstants.FRAME_OUTPUT_GAP == 0)
-                    {
-                        Imgcodecs.imwrite(
-                            String.format("%simage%d-3.redrawn.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER, this.count),
-                            undistortedImage);
+                    if (VisionConstants.DEBUG_FRAME_OUTPUT && this.count % VisionConstants.FRAME_OUTPUT_GAP == 0) {
+                        Imgcodecs.imwrite(String.format("%simage%d-3.redrawn.jpg", VisionConstants.DEBUG_OUTPUT_FOLDER,
+                                this.count), undistortedImage);
                     }
                 }
 
-                if (largestRectangle != null)
-                {
-                    Imgproc.rectangle(undistortedImage, 
-                    new Point(largestRectangle.center.x - (largestRectangle.size.length/2), largestRectangle.center.y - (largestRectangle.size.width/2)), 
-                    new Point(largestRectangle.center.x + (largestRectangle.size.length/2), largestRectangle.center.y + (largestRectangle.size.width/2)), 
-                    new Scalar(255, 0, 0), 2);
+                if (largestRectangle != null) {
+                    Imgproc.rectangle(undistortedImage,
+                            new Point(largestRectangle.center.x - (largestRectangle.size.length / 2),
+                                    largestRectangle.center.y - (largestRectangle.size.width / 2)),
+                            new Point(largestRectangle.center.x + (largestRectangle.size.length / 2),
+                                    largestRectangle.center.y + (largestRectangle.size.width / 2)),
+                            new Scalar(255, 0, 0), 2);
                 }
 
-                if (VisionConstants.DEBUG_FRAME_STREAM && this.controller.getStreamEnabled())
-                {
+                if (VisionConstants.DEBUG_FRAME_STREAM && this.controller.getStreamEnabled()) {
                     this.output.outputDebugFrame(undistortedImage);
                 }
             }
@@ -195,8 +162,7 @@ public class HSVCenterPipelinePowercell implements IFramePipeline
         this.output.write(largestRectangle.center);
         this.output.write(largestRectangle.size);
 
-        if (largestContour != null)
-        {
+        if (largestContour != null) {
             largestContour.release();
             largestContour = null;
         }

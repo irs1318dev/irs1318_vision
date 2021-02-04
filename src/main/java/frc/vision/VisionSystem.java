@@ -14,65 +14,60 @@ import frc.vision.writer.*;
 import net.samuelcampos.usbdrivedetector.USBDeviceDetectorManager;
 import net.samuelcampos.usbdrivedetector.USBStorageDevice;
 
-public class VisionSystem implements Runnable
-{
+public class VisionSystem implements Runnable {
     private IFrameReader frameReader;
-    private IFramePipeline framePipeline;    
+    private IFramePipeline framePipeline;
 
     /**
      * Initializes a new instance of the VisionSystem class.
-     * @param frameReader that reads frames from some source
+     * 
+     * @param frameReader   that reads frames from some source
      * @param framePipeline that processs frames from some source
      */
-    public VisionSystem(IFrameReader frameReader, IFramePipeline framePipeline, IController controller)
-    {
+    public VisionSystem(IFrameReader frameReader, IFramePipeline framePipeline, IController controller) {
         this.frameReader = frameReader;
         this.framePipeline = framePipeline;
         this.controller = controller;
     }
 
     /**
-     * Run the process of capturing and analyzing frames until we have reached the end of the stream.
+     * Run the process of capturing and analyzing frames until we have reached the
+     * end of the stream.
      */
     @Override
-    public void run()
-    {
+    public void run() {
         long processdFrames = 0;
 
-        try
-        {
+        try {
             long lastMeasured = System.currentTimeMillis();
-            while (this.captureAndProcess())
-            {
+            while (this.captureAndProcess()) {
                 processdFrames++;
-                if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT && processdFrames % VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL == 0)
-                {
+                if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT
+                        && processdFrames % VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL == 0) {
                     long elapsedTime = System.currentTimeMillis() - lastMeasured;
 
-                    double framesPerMillisecond = ((double)VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL) / elapsedTime;
-                    System.out.println(String.format("Recent Average frame processing rate %f fps", 1000.0 * framesPerMillisecond));
+                    double framesPerMillisecond = ((double) VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL) / elapsedTime;
+                    System.out.println(String.format("Recent Average frame processing rate %f fps",
+                            1000.0 * framesPerMillisecond));
 
                     lastMeasured = System.currentTimeMillis();
                 }
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     /**
-     * Capture a frame from the frame reader and process that frame using the frame pipeline
+     * Capture a frame from the frame reader and process that frame using the frame
+     * pipeline
+     * 
      * @return
      * @throws InterruptedException
      */
-    public boolean captureAndProcess()
-        throws InterruptedException
-    {
+    public boolean captureAndProcess() throws InterruptedException {
         Mat image = this.frameReader.getCurrentFrame();
-        if (image == null)
-        {
+        if (image == null) {
             return false;
         }
 
@@ -83,62 +78,65 @@ public class VisionSystem implements Runnable
 
     /**
      * Main entrypoint for Vision System.
+     * 
      * @param args from commandline input
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        String cameraString;
-        IFrameReader cameraReader;
-        if (args != null && args.length != 0 && args[0] != null && !args[0].equals(""))
-        {
+        String cameraStringRetro;
+        String cameraStringPowercell;
+        IFrameReader cameraReaderRetro;
+        IFrameReader cameraReaderPowercell;
+        if (args != null && args.length != 0 && args[0] != null && !args[0].equals("") && args[1] != null
+                && !args[1].equals("")) {
             String argument = args[0];
+            String argument2 = args[1];
 
-            boolean isNumeric = false; 
+            boolean isNumeric = false;
             int result = 0;
-            try
-            {
+            int result2 = 0;
+            try {
                 result = Integer.parseInt(argument);
+                result2 = Integer.parseInt(argument2);
                 isNumeric = true;
-            }
-            catch (NumberFormatException ex)
-            {
+            } catch (NumberFormatException ex) {
             }
 
-            if (isNumeric)
-            {
-                cameraReader = new CameraReader(result);
-            }
-            else
-            {
-                cameraReader = new CameraReader(argument);
+            if (isNumeric) {
+                cameraReaderRetro = new CameraReader(result);
+                cameraReaderPowercell = new CameraReader(result);
+            } else {
+                cameraReaderRetro = new CameraReader(argument);
+                cameraReaderPowercell = new CameraReader(argument);
             }
 
-            cameraString = argument; 
-        }
-        else
-        {
-            cameraReader = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING);
-            cameraString = "" + VisionConstants.DEFAULT_SETTING;
+            cameraStringRetro = argument;
+            cameraStringPowercell = argument2;
+        } else {
+            cameraReaderRetro = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_RETRO);
+            cameraReaderPowercell = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_POWERCELL);
+            cameraStringRetro = "" + VisionConstants.DEFAULT_SETTING_RETRO;
+            cameraStringPowercell = "" + VisionConstants.DEFAULT_SETTING_POWERCELL;
         }
 
-        if (!cameraReader.open())
-        {
-            System.err.println(String.format("unable to open camera writer '%s'!", cameraString));
+        if (!cameraReaderRetro.open()) {
+            System.err.println(String.format("unable to open camera writer '%s'!", cameraStringRetro));
+            System.exit(1);
+        }
+        if (!cameraReaderPowercell.open()) {
+            System.err.println(String.format("unable to open camera writer '%s'!", cameraStringPowercell));
             System.exit(1);
         }
 
         IWriter<Point> pointWriter = new NetworkTablePointWriter(); // new DebugPointWriter();
-        if (!pointWriter.open())
-        {
+        if (!pointWriter.open()) {
             System.err.println("unable to open point writer!");
             System.exit(1);
         }
 
         IController controller = new NetworkTableController(); // new DefaultController();
-        if (!controller.open())
-        {
+        if (!controller.open()) {
             System.err.println("unable to open controller!");
             System.exit(1);
         }
@@ -147,15 +145,11 @@ public class VisionSystem implements Runnable
         File imageLoggingDirectory = null;
         USBDeviceDetectorManager driveDetector = new USBDeviceDetectorManager();
         List<USBStorageDevice> devices = driveDetector.getRemovableDevices();
-        if (devices != null && devices.size() > 0)
-        {
-            for (USBStorageDevice device : devices)
-            {
-                if (device.canWrite())
-                {
+        if (devices != null && devices.size() > 0) {
+            for (USBStorageDevice device : devices) {
+                if (device.canWrite()) {
                     File deviceRootDirectory = device.getRootDirectory();
-                    if (deviceRootDirectory.isDirectory() && deviceRootDirectory.getFreeSpace() > 1L)
-                    {
+                    if (deviceRootDirectory.isDirectory() && deviceRootDirectory.getFreeSpace() > 1L) {
                         File imagesSubdirectory = new File(deviceRootDirectory, "rpi-images");
                         imagesSubdirectory.mkdir();
 
@@ -166,28 +160,29 @@ public class VisionSystem implements Runnable
             }
         }
 
+        Thread cameraThreadRetro = new Thread(cameraReaderRetro);
+        cameraThreadRetro.start();
 
-        Thread cameraThread = new Thread(cameraReader);
-        cameraThread.start();
+        Thread cameraThreadPowercell = new Thread(cameraReaderPowercell);
+        
 
-        HSVCenterPipeline framePipeline;
-        HSVCenterPipelinePowercell framePipelinePowercell;
-        VisionSystem visionSystem;
+        HSVCenterPipeline framePipelineRetro = new HSVCenterPipeline(pointWriter, controller, false,
+                imageLoggingDirectory);
+        VisionSystem visionSystemRetro = new VisionSystem(cameraReaderRetro, framePipelineRetro);
 
-        if(controller.getProcessingEnabled == 1)
-        {
-            framePipeline = new HSVCenterPipeline(pointWriter, controller, false, imageLoggingDirectory);
-            visionSystem = new VisionSystem(cameraReader, framePipeline);
-        }
-        else if(controller.getProcessingEnabled == 2)
-        {
-            framePipelinePowercell = new HSVCenterPipelinePowercell(pointWriter, controller, false, imageLoggingDirectory);
-            visionSystem = new VisionSystem(cameraReader, framePipeline);
-        }
+        HSVCenterPipelinePowercell framePipelinePowercell = new HSVCenterPipelinePowercell(pointWriter, controller,
+                false, imageLoggingDirectory);
+        VisionSystem visionSystemPowercell = new VisionSystem(cameraReaderPowercell, framePipelinePowercell);
+        
+                
+        
+        Thread visionThreadRetro = new Thread(visionSystemRetro);
+        visionThreadRetro.run();
 
-        Thread visionThread = new Thread(visionSystem);
-        visionThread.run();
+        Thread visionThreadPowercell = new Thread(visionSystemPowercell);
+        visionThreadPowercell.run();
 
-        cameraReader.stop();
+        cameraReaderRetro.stop();
+        cameraReaderPowercell.stop();
     }
 }

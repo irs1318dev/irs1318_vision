@@ -13,12 +13,15 @@ public class VisionConstants
     public static final double ANGLE_TO_RADIANS = (VisionConstants.PI / 180.0f);
     public static final double RADIANS_TO_ANGLE = (180.0f / VisionConstants.PI);
 
-    // Default camera settings:
-    public static final int DEFAULT_SETTING = 0;
+    // Default camera settings retroreflective:
+    public static final int DEFAULT_SETTING_RETRO = 0;
     public static final String CAMERA_NAME = "RPI-raw";
     public static final String DEBUG_STREAM_NAME = "RPI-debug";
     public static final int STREAM_RESOLUTION_X = 640;
     public static final int STREAM_RESOLUTION_Y = 360;
+
+    //Default camera settings powercell:
+    public static final int DEFAULT_SETTING_POWERCELL = 0;
 
     // Debug/output settings:
     public static final int FRAME_OUTPUT_GAP = 30; // the number of frames to wait between saving images to file system
@@ -37,8 +40,8 @@ public class VisionConstants
     public static final double LIFECAM_CAMERA_FIELD_OF_VIEW_Y = 36.91875; // 16:9 field of view along y axis
     public static final double LIFECAM_CAMERA_FOCAL_LENGTH_X = 1078.4675; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
     public static final double LIFECAM_CAMERA_FOCAL_LENGTH_Y = 1078.4675; // focal_length = res_* / (2.0 * tan (FOV_* / 2.0)
-    public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS_REFLECTIVE = 1;
-    public static final int LIFECAM_CAMERA_VISION_EXPOSURE_REFLECTIVE = 1;
+    public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS_RETRO = 1;
+    public static final int LIFECAM_CAMERA_VISION_EXPOSURE_RETRO = 1;
     public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS_POWERCELL = 20;
     public static final int LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL = 20;
 
@@ -98,3 +101,4 @@ public class VisionConstants
         return Math.asin(value) * VisionConstants.RADIANS_TO_ANGLE;
     }
 }
+_
