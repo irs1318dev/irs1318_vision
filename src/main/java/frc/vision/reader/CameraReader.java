@@ -1,4 +1,4 @@
-lipackage frc.vision.reader;
+package frc.vision.reader;
 
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;

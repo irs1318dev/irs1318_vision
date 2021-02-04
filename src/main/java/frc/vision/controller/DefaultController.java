@@ -17,8 +17,8 @@ public class DefaultController implements IController
     }
 
     @Override
-    public boolean getProcessingEnabled()
+    public int getProcessingEnabled()
     {
-        return true;
+        return 2;
     }
 }

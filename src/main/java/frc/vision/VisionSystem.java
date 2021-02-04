@@ -36,14 +36,14 @@ public class VisionSystem implements Runnable {
      */
     @Override
     public void run() {
-        long processdFrames = 0;
+        long processedFrames = 0;
 
         try {
             long lastMeasured = System.currentTimeMillis();
             while (this.captureAndProcess()) {
-                processdFrames++;
+                processedFrames++;
                 if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT
-                        && processdFrames % VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL == 0) {
+                        && processedFrames % VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL == 0) {
                     long elapsedTime = System.currentTimeMillis() - lastMeasured;
 
                     double framesPerMillisecond = ((double) VisionConstants.DEBUG_FPS_AVERAGING_INTERVAL) / elapsedTime;

@@ -101,4 +101,3 @@ public class VisionConstants
         return Math.asin(value) * VisionConstants.RADIANS_TO_ANGLE;
     }
 }
-_
