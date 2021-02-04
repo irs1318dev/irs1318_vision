@@ -37,17 +37,17 @@ public class NetworkTableController implements IController
         return NetworkTableController.getIntValueIfAssigned(this.processingEnabledEntry);
     }
 
-
     private static int getIntValueIfAssigned(NetworkTableEntry entry) // might be wrong pls help
     {
         if (entry != null)
         {
             NetworkTableValue value = entry.getValue();
-            if (value.getType() == NetworkTableType.kInt)
+            if (value.getType() == NetworkTableType.kDouble)
             {
-                return value.getInt();
+                return (int)value.getDouble();
             }
         }
+
         return 0;
     }
 

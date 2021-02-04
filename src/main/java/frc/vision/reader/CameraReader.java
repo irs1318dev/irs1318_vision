@@ -75,8 +75,8 @@ public class CameraReader implements Runnable, IFrameReader
 
         this.vc.set(Videoio.CAP_PROP_FRAME_WIDTH, VisionConstants.LIFECAM_CAMERA_RESOLUTION_X);
         this.vc.set(Videoio.CAP_PROP_FRAME_HEIGHT, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
-        this.vc.set(Videoio.CAP_PROP_EXPOSURE, VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE);
-        this.vc.set(Videoio.CAP_PROP_BRIGHTNESS, VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS);
+        this.vc.set(Videoio.CAP_PROP_EXPOSURE, VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_RETRO);
+        this.vc.set(Videoio.CAP_PROP_BRIGHTNESS, VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS_RETRO);
         this.vc.set(Videoio.CAP_PROP_FPS, VisionConstants.LIFECAM_CAMERA_FPS);
 
         return this.opened;
