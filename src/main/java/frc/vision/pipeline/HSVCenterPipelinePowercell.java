@@ -21,7 +21,7 @@ import frc.vision.helpers.HSVFilter;
 import frc.vision.helpers.ImageUndistorter;
 
 public class HSVCenterPipelinePowercell implements IFramePipeline {
-    private final IWriter<Point> output;
+    private final IWriter<RotatedRect> output;
     private final IController controller;
     private final File imageLoggingDirectory;
 
@@ -37,7 +37,7 @@ public class HSVCenterPipelinePowercell implements IFramePipeline {
      * @param shouldUndistort       whether to undistor the image or not
      * @param imageLoggingDirectory to log images to
      */
-    public HSVCenterPipelinePowercell(IWriter<Point> output, IController controller, boolean shouldUndistort,
+    public HSVCenterPipelinePowercell(IWriter<RotatedRect> output, IController controller, boolean shouldUndistort,
             File imageLoggingDirectory) {
         this.output = output;
         this.controller = controller;

@@ -10,8 +10,7 @@ import edu.wpi.first.cameraserver.*;
 import frc.vision.IFrameReader;
 import frc.vision.VisionConstants;
 
-public class WpilibCameraReader implements Runnable, IFrameReader
-{
+public class WpilibCameraReader implements Runnable, IFrameReader {
     private final IController controller;
 
     private final String videoUrl;
@@ -31,10 +30,10 @@ public class WpilibCameraReader implements Runnable, IFrameReader
 
     /**
      * Initializes a new instance of the WpilibCameraReader class.
+     * 
      * @param videoUrl to use to retrieve frame data
      */
-    public WpilibCameraReader(String videoUrl)
-    {
+    public WpilibCameraReader(String videoUrl, int cameraMode) {
         this.videoUrl = videoUrl;
         this.usbId = -1;
 
@@ -47,15 +46,15 @@ public class WpilibCameraReader implements Runnable, IFrameReader
         this.camera = null;
         this.cvSink = null;
 
-        this.cameraMode = 0;
+        this.cameraMode = cameraMode;
     }
 
     /**
      * Initializes a new instance of the WpilibCameraReader class.
+     * 
      * @param usbId to use to identify a local USB camera
      */
-    public WpilibCameraReader(int usbId)
-    {
+    public WpilibCameraReader(int usbId, int cameraMode) {
         this.usbId = usbId;
         this.videoUrl = null;
 
@@ -67,41 +66,34 @@ public class WpilibCameraReader implements Runnable, IFrameReader
         this.opened = false;
         this.camera = null;
 
-        this.cameraMode = 0;
+        this.cameraMode = cameraMode;
     }
 
     /**
      * Opens the camera reader
+     * 
      * @return true if we were able to open the camera reader
      */
     @Override
-    public boolean open()
-    {
+    public boolean open() {
         this.cvSink = new CvSink("Camera Sink");
-        if (this.videoUrl != null)
-        {
+        if (this.videoUrl != null) {
             this.camera = CameraServer.getInstance().addAxisCamera(VisionConstants.CAMERA_NAME, this.videoUrl);
             this.opened = true;
-        }
-        else
-        {
+        } else {
             UsbCamera usbCamera = new UsbCamera(VisionConstants.CAMERA_NAME, this.usbId);
             CameraServer.getInstance().addCamera(usbCamera);
 
-            this.cameraMode = this.controller.getProcessingEnabled();
-
-            if (this.cameraMode == 1)
-            {
+            if (this.cameraMode == 1) {
                 usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_RETRO);
                 usbCamera.setBrightness(VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS_RETRO);
-            }
-            else 
-            {
+            } else {
                 usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL);
                 usbCamera.setBrightness(VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS_POWERCELL);
             }
 
-            usbCamera.setResolution(VisionConstants.LIFECAM_CAMERA_RESOLUTION_X, VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
+            usbCamera.setResolution(VisionConstants.LIFECAM_CAMERA_RESOLUTION_X,
+                    VisionConstants.LIFECAM_CAMERA_RESOLUTION_Y);
             usbCamera.setFPS(VisionConstants.LIFECAM_CAMERA_FPS);
 
             this.camera = usbCamera;
@@ -113,20 +105,17 @@ public class WpilibCameraReader implements Runnable, IFrameReader
     }
 
     /**
-     * Run the thread that captures frames and buffers the most recently retrieved frame so that an pipeline can use it.
+     * Run the thread that captures frames and buffers the most recently retrieved
+     * frame so that an pipeline can use it.
      */
     @Override
-    public void run()
-    {
-        if (this.opened)
-        {
+    public void run() {
+        if (this.opened) {
             Mat image;
-            while (!this.stop)
-            {
+            while (!this.stop) {
                 image = new Mat();
                 long result = this.cvSink.grabFrame(image);
-                if (result != 0)
-                {
+                if (result != 0) {
                     this.setCurrentFrame(image);
                 }
             }
@@ -141,29 +130,24 @@ public class WpilibCameraReader implements Runnable, IFrameReader
      * stop retrieving frames
      */
     @Override
-    public void stop()
-    {
+    public void stop() {
         this.stop = true;
     }
 
     /**
      * Retrieve the most recent image frame saved from the Camera
+     * 
      * @return frame of an image
      * @throws InterruptedException
      */
     @Override
-    public Mat getCurrentFrame()
-        throws InterruptedException
-    {
-        synchronized (this.lock)
-        {
-            while (!this.frameReady && !this.stop)
-            {
+    public Mat getCurrentFrame() throws InterruptedException {
+        synchronized (this.lock) {
+            while (!this.frameReady && !this.stop) {
                 this.lock.wait(100);
             }
 
-            if (this.stop)
-            {
+            if (this.stop) {
                 return null;
             }
 
@@ -175,14 +159,12 @@ public class WpilibCameraReader implements Runnable, IFrameReader
 
     /**
      * set the current frame as the current frame
+     * 
      * @param frame to set as current
      */
-    private void setCurrentFrame(Mat frame)
-    {
-        synchronized (this.lock)
-        {
-            if (this.currentFrame != null)
-            {
+    private void setCurrentFrame(Mat frame) {
+        synchronized (this.lock) {
+            if (this.currentFrame != null) {
                 // clean up previous frame
                 this.currentFrame.release();
                 this.currentFrame = null;
