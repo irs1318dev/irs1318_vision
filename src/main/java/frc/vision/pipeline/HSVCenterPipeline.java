@@ -68,7 +68,7 @@ public class HSVCenterPipeline implements IFramePipeline {
             this.output.outputRawFrame(image);
         }
 
-        if (this.controller.getProcessingEnabled() == 0) {
+        if (this.controller.getProcessingEnabled() != 1) {
             this.output.write(null);
             return;
         }

@@ -28,27 +28,21 @@ public class NetworkTablePointWriter extends NetworkTableWriterBase<Point>
     @Override
     public void write(Point point) // pass in a point = point.center
     {
-        if (point == null)
-        {
+        if (point == null) {
             this.xEntry.setDouble(-1318.0);
             this.yEntry.setDouble(-1318.0);
-        }
-        else
-        {
+        } else {
             this.xEntry.setDouble(point.x);
             this.yEntry.setDouble(point.y);
         }
 
-        if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT)
-        {
-            if (point != null)
-            {
+        if (VisionConstants.DEBUG && VisionConstants.DEBUG_PRINT_OUTPUT) {
+            if (point != null) {
                 System.out.println(String.format("Point: %f, %f", point.x, point.y));
-            }
-            else
-            {
+            } else {
                 System.out.println("Point not found");
             }
         }
     }
+
 }
