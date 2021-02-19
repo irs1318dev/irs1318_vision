@@ -48,7 +48,7 @@ public class HSVCenterPipelineTest
 
             HSVCenterPipeline pipeline = new HSVCenterPipeline(pointWriter, new DefaultController(), false, null);
 
-            VisionSystem vs = new VisionSystem(frameReader, pipeline);
+            VisionSystem vs = new VisionSystem(frameReader, pipeline, null);
             canCaptureAndProcess = vs.captureAndProcess();
 
             verify(pointWriter).write(eq(new Point(x, y)));

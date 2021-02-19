@@ -6,6 +6,7 @@ import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.RotatedRect;
 
 import frc.vision.controller.*;
 import frc.vision.pipeline.*;
@@ -17,6 +18,7 @@ import net.samuelcampos.usbdrivedetector.USBStorageDevice;
 public class VisionSystem implements Runnable {
     private IFrameReader frameReader;
     private IFramePipeline framePipeline;
+    private IController controller;
 
     /**
      * Initializes a new instance of the VisionSystem class.
@@ -114,8 +116,8 @@ public class VisionSystem implements Runnable {
             cameraStringRetro = argument;
             cameraStringPowercell = argument2;
         } else {
-            cameraReaderRetro = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_RETRO);
-            cameraReaderPowercell = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_POWERCELL);
+            cameraReaderRetro = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_RETRO, 1);
+            cameraReaderPowercell = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_POWERCELL, 2);
             cameraStringRetro = "" + VisionConstants.DEFAULT_SETTING_RETRO;
             cameraStringPowercell = "" + VisionConstants.DEFAULT_SETTING_POWERCELL;
         }
@@ -132,6 +134,12 @@ public class VisionSystem implements Runnable {
         IWriter<Point> pointWriter = new NetworkTablePointWriter(); // new DebugPointWriter();
         if (!pointWriter.open()) {
             System.err.println("unable to open point writer!");
+            System.exit(1);
+        }
+
+        IWriter<RotatedRect> rectWriter = new NetworkTableRotatedRectWriter(); // new DebugRotatedRectWriter();
+        if (!rectWriter.open()) {
+            System.err.println("unable to open rectangle writer!");
             System.exit(1);
         }
 
@@ -168,11 +176,11 @@ public class VisionSystem implements Runnable {
 
         HSVCenterPipeline framePipelineRetro = new HSVCenterPipeline(pointWriter, controller, false,
                 imageLoggingDirectory);
-        VisionSystem visionSystemRetro = new VisionSystem(cameraReaderRetro, framePipelineRetro);
+        VisionSystem visionSystemRetro = new VisionSystem(cameraReaderRetro, framePipelineRetro, controller);
 
-        HSVCenterPipelinePowercell framePipelinePowercell = new HSVCenterPipelinePowercell(pointWriter, controller,
+        HSVCenterPipelinePowercell framePipelinePowercell = new HSVCenterPipelinePowercell(rectWriter, controller,
                 false, imageLoggingDirectory);
-        VisionSystem visionSystemPowercell = new VisionSystem(cameraReaderPowercell, framePipelinePowercell);
+        VisionSystem visionSystemPowercell = new VisionSystem(cameraReaderPowercell, framePipelinePowercell, controller);
         
                 
         

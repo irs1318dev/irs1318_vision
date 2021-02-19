@@ -5,9 +5,12 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -145,9 +148,9 @@ public class HSVCenterPipelinePowercell implements IFramePipeline {
 
                 if (largestRectangle != null) {
                     Imgproc.rectangle(undistortedImage,
-                            new Point(largestRectangle.center.x - (largestRectangle.size.length / 2),
+                            new Point(largestRectangle.center.x - (largestRectangle.size.height / 2),
                                     largestRectangle.center.y - (largestRectangle.size.width / 2)),
-                            new Point(largestRectangle.center.x + (largestRectangle.size.length / 2),
+                            new Point(largestRectangle.center.x + (largestRectangle.size.height / 2),
                                     largestRectangle.center.y + (largestRectangle.size.width / 2)),
                             new Scalar(255, 0, 0), 2);
                 }
@@ -158,9 +161,8 @@ public class HSVCenterPipelinePowercell implements IFramePipeline {
             }
         }
 
-        // finally, output that center of mass
-        this.output.write(largestRectangle.center);
-        this.output.write(largestRectangle.size);
+        // finally, output that rotated rectangle
+        this.output.write(largestRectangle);
 
         if (largestContour != null) {
             largestContour.release();

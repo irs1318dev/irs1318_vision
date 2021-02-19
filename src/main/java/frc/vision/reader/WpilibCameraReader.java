@@ -6,13 +6,10 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoCamera;
 import edu.wpi.first.cameraserver.*;
-
 import frc.vision.IFrameReader;
 import frc.vision.VisionConstants;
 
 public class WpilibCameraReader implements Runnable, IFrameReader {
-    private final IController controller;
-
     private final String videoUrl;
     private final int usbId;
 
