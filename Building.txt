@@ -5,6 +5,7 @@ Before you can build, you must first set a couple environment variables based on
 To download OpenCV releases:
 https://github.com/opencv/opencv/releases
 https://medium.com/macoclock/setting-up-mac-for-opencv-java-development-with-intellij-idea-fd2153eb634f 
+    - Change ownership of root directory to user
 
 For me, this is:
 Windows:	C:\opencv\build\java\opencv-410.jar and C:\opencv\build\java\x64\
@@ -22,6 +23,10 @@ Once it can run on the RPI, you can set it up to run as a service.  To do so:
 2. Run: sudo systemctl daemon-reload 
 3. Run: sudo systemctl start irs1318vision.service
 4. Run: sudo systemctl enable irs1318vision.service
+
+After rebuilding, stop and restart the SystemD service:
+1. Run: sudo systemctl stop irs1318vision.service
+2. Run: sudo systemctl start irs1318vision.service
 
 You can run the following to check a service's status:						sudo systemctl status irs1318vision.service
 You can run the following to read a service's output to stdout and stderr:	sudo journalctl -u irs1318vision

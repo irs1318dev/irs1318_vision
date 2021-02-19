@@ -37,15 +37,15 @@ public class HSVCenterPipeline implements IFramePipeline {
      * @param shouldUndistort       whether to undistor the image or not
      * @param imageLoggingDirectory to log images to
      */
-    public HSVCenterPipeline( //
-            IWriter<Point> output, //
-            IController controller, //
-            boolean shouldUndistort, //
-            File imageLoggingDirectory) //
+    public HSVCenterPipeline(
+            IWriter<Point> output,
+            IController controller,
+            boolean shouldUndistort, 
+            File imageLoggingDirectory)
     {
         this.output = output;
         this.controller = controller;
-        this.imageLoggingDirectory = imageLoggingDirectory; // 
+        this.imageLoggingDirectory = imageLoggingDirectory;
 
         if (shouldUndistort) {
             this.undistorter = new ImageUndistorter();
