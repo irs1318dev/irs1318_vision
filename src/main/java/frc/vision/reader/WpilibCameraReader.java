@@ -85,7 +85,12 @@ public class WpilibCameraReader implements Runnable, IFrameReader {
                 usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_RETRO);
                 usbCamera.setBrightness(VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS_RETRO);
             } else {
-                usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL);
+                if (VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL > 0) {
+                    usbCamera.setExposureManual(VisionConstants.LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL);
+                } else {
+                    usbCamera.setExposureAuto();
+                }
+
                 usbCamera.setBrightness(VisionConstants.LIFECAM_CAMERA_VISION_BRIGHTNESS_POWERCELL);
             }
 

@@ -25,11 +25,11 @@ public class VisionConstants
 
     // Debug/output settings:
     public static final int FRAME_OUTPUT_GAP = 30; // the number of frames to wait between saving images to file system
-    public static final boolean DEBUG = false;
-    public static final boolean DEBUG_PRINT_OUTPUT = false;
-    public static final boolean DEBUG_PRINT_PIPELINE_DATA = false;
+    public static final boolean DEBUG = true;
+    public static final boolean DEBUG_PRINT_OUTPUT = true;
+    public static final boolean DEBUG_PRINT_PIPELINE_DATA = true;
     public static final int DEBUG_FPS_AVERAGING_INTERVAL = 30;
-	public static final boolean DEBUG_FRAME_STREAM = false;
+	public static final boolean DEBUG_FRAME_STREAM = true;
     public static final boolean DEBUG_FRAME_OUTPUT = false;
     public static final String DEBUG_OUTPUT_FOLDER = "/home/pi/vision/";
 
@@ -43,7 +43,7 @@ public class VisionConstants
     public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS_RETRO = 1;
     public static final int LIFECAM_CAMERA_VISION_EXPOSURE_RETRO = 1;
     public static final int LIFECAM_CAMERA_VISION_BRIGHTNESS_POWERCELL = 20;
-    public static final int LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL = 20;
+    public static final int LIFECAM_CAMERA_VISION_EXPOSURE_POWERCELL = -1; // auto
 
     public static final int LIFECAM_CAMERA_OPERATOR_BRIGHTNESS = 35;
     public static final int LIFECAM_CAMERA_FPS = 30; // Max supported value is 30

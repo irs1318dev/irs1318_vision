@@ -37,7 +37,7 @@ public class NetworkTableController implements IController
         return NetworkTableController.getIntValueIfAssigned(this.processingEnabledEntry);
     }
 
-    private static int getIntValueIfAssigned(NetworkTableEntry entry) // might be wrong pls help
+    private static int getIntValueIfAssigned(NetworkTableEntry entry)
     {
         if (entry != null)
         {
@@ -48,7 +48,7 @@ public class NetworkTableController implements IController
             }
         }
 
-        return 0;
+        return 2;
     }
 
     private static boolean getBooleanValueIfAssigned(NetworkTableEntry entry)
