@@ -86,56 +86,57 @@ public class VisionSystem implements Runnable {
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        String cameraStringRetro;
+        // String cameraStringRetro;
         String cameraStringPowercell;
-        IFrameReader cameraReaderRetro;
+        // IFrameReader cameraReaderRetro;
         IFrameReader cameraReaderPowercell;
-        if (args != null && args.length != 0 && args[0] != null && !args[0].equals("") && args[1] != null
-                && !args[1].equals("")) {
-            String argument = args[0];
-            String argument2 = args[1];
+        // if (args != null && args.length != 0 && args[0] != null && !args[0].equals("") && args[1] != null
+        //         && !args[1].equals("")) {
+        //     String argument = args[0];
+        //     String argument2 = args[1];
 
-            boolean isNumeric = false;
-            int result = 0;
-            int result2 = 0;
-            try {
-                result = Integer.parseInt(argument);
-                result2 = Integer.parseInt(argument2);
-                isNumeric = true;
-            } catch (NumberFormatException ex) {
-            }
+        //     boolean isNumeric = false;
+        //     int result = 0;
+        //     int result2 = 0;
+        //     try {
+        //         result = Integer.parseInt(argument);
+        //         result2 = Integer.parseInt(argument2);
+        //         isNumeric = true;
+        //     } catch (NumberFormatException ex) {
+        //     }
 
-            if (isNumeric) {
-                cameraReaderRetro = new CameraReader(result);
-                cameraReaderPowercell = new CameraReader(result);
-            } else {
-                cameraReaderRetro = new CameraReader(argument);
-                cameraReaderPowercell = new CameraReader(argument);
-            }
+        //     if (isNumeric) {
+        //         cameraReaderRetro = new CameraReader(result);
+        //         cameraReaderPowercell = new CameraReader(result);
+        //     } else {
+        //         cameraReaderRetro = new CameraReader(argument);
+        //         cameraReaderPowercell = new CameraReader(argument);
+        //     }
 
-            cameraStringRetro = argument;
-            cameraStringPowercell = argument2;
-        } else {
-            cameraReaderRetro = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_RETRO, 1);
+        //     cameraStringRetro = argument;
+        //     cameraStringPowercell = argument2;
+        // } else {
+            // cameraReaderRetro = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_RETRO, 1);
             cameraReaderPowercell = new WpilibCameraReader(VisionConstants.DEFAULT_SETTING_POWERCELL, 2);
-            cameraStringRetro = "" + VisionConstants.DEFAULT_SETTING_RETRO;
+            // cameraStringRetro = "" + VisionConstants.DEFAULT_SETTING_RETRO;
             cameraStringPowercell = "" + VisionConstants.DEFAULT_SETTING_POWERCELL;
-        }
+        // }
 
-        if (!cameraReaderRetro.open()) {
-            System.err.println(String.format("unable to open camera writer '%s'!", cameraStringRetro));
-            System.exit(1);
-        }
+        // if (!cameraReaderRetro.open()) {
+        //     System.err.println(String.format("unable to open camera writer '%s'!", cameraStringRetro));
+        //     System.exit(1);
+        // }
+
         if (!cameraReaderPowercell.open()) {
             System.err.println(String.format("unable to open camera writer '%s'!", cameraStringPowercell));
             System.exit(1);
         }
 
-        IWriter<Point> pointWriter = new NetworkTablePointWriter(); // new DebugPointWriter();
-        if (!pointWriter.open()) {
-            System.err.println("unable to open point writer!");
-            System.exit(1);
-        }
+        // IWriter<Point> pointWriter = new NetworkTablePointWriter(); // new DebugPointWriter();
+        // if (!pointWriter.open()) {
+        //     System.err.println("unable to open point writer!");
+        //     System.exit(1);
+        // }
 
         IWriter<RotatedRect> rectWriter = new NetworkTableRotatedRectWriter(); // new DebugRotatedRectWriter();
         if (!rectWriter.open()) {
@@ -167,16 +168,16 @@ public class VisionSystem implements Runnable {
                 }
             }
         }
-
+/*
         Thread cameraThreadRetro = new Thread(cameraReaderRetro);
-        cameraThreadRetro.start();
+        cameraThreadRetro.start();*/
 
         Thread cameraThreadPowercell = new Thread(cameraReaderPowercell);
-        
+        cameraThreadPowercell.start();
 
-        HSVCenterPipeline framePipelineRetro = new HSVCenterPipeline(pointWriter, controller, false,
-                imageLoggingDirectory);
-        VisionSystem visionSystemRetro = new VisionSystem(cameraReaderRetro, framePipelineRetro, controller);
+        // HSVCenterPipeline framePipelineRetro = new HSVCenterPipeline(pointWriter, controller, false,
+        //         imageLoggingDirectory);
+        // VisionSystem visionSystemRetro = new VisionSystem(cameraReaderRetro, framePipelineRetro, controller);
 
         HSVCenterPipelinePowercell framePipelinePowercell = new HSVCenterPipelinePowercell(rectWriter, controller,
                 false, imageLoggingDirectory);
@@ -184,13 +185,13 @@ public class VisionSystem implements Runnable {
         
                 
         
-        Thread visionThreadRetro = new Thread(visionSystemRetro);
-        visionThreadRetro.run();
+        // Thread visionThreadRetro = new Thread(visionSystemRetro);
+        // visionThreadRetro.run();
 
         Thread visionThreadPowercell = new Thread(visionSystemPowercell);
         visionThreadPowercell.run();
 
-        cameraReaderRetro.stop();
+        // cameraReaderRetro.stop();
         cameraReaderPowercell.stop();
     }
 }
