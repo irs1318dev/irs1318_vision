@@ -21,8 +21,8 @@ public class NetworkTablePointWriter extends NetworkTableWriterBase<Point>
     @Override
     protected void createEntries(NetworkTable table)
     {
-        this.xEntry = table.getEntry("v.x");
-        this.yEntry = table.getEntry("v.y");
+        this.xEntry = table.getEntry("v.pointX");
+        this.yEntry = table.getEntry("v.pointY");
     }
 
     @Override
